@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 TrafficLevel = Literal["low", "moderate", "heavy"]
 TravelMode = Literal["walking", "driving", "transit"]
+BoothDataSource = Literal["google_maps", "demo_fallback"]
 
 
 class StrictModel(BaseModel):
@@ -51,6 +52,9 @@ class BoothResult(StrictModel):
     drive_duration_min: int | None = Field(default=None, ge=0)
     traffic_level: TrafficLevel
     facilities: list[str] = Field(default_factory=list)
+    data_source: BoothDataSource
+    is_official_assignment: bool = False
+    verification_url: str
 
 
 class VisitTimeSuggestion(StrictModel):
@@ -61,6 +65,8 @@ class VisitTimeSuggestion(StrictModel):
 class NearbyResponse(StrictModel):
     booths: list[BoothResult]
     suggested_visit_time: VisitTimeSuggestion
+    source_note: str
+    official_verification_url: str
 
 
 class DirectionsResult(StrictModel):

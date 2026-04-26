@@ -13,6 +13,8 @@ describe("findNearbyBooths", () => {
           window: "10:00-11:30",
           reason: "Low traffic",
         },
+        source_note: "Verify official booth with ECI.",
+        official_verification_url: "https://electoralsearch.eci.gov.in/",
       }),
     });
     vi.stubGlobal("fetch", fetchMock);

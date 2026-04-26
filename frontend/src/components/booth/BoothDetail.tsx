@@ -13,18 +13,31 @@ const trafficLabels: Record<BoothResult["traffic_level"], string> = {
   heavy: "Heavy traffic now",
 };
 
+const sourceLabels: Record<BoothResult["data_source"], string> = {
+  google_maps: "Maps result",
+  demo_fallback: "Demo fallback",
+};
+
 export function BoothDetail({ booth, onDirections, onVerify }: BoothDetailProps) {
   return (
     <article className="booth-card">
       <div>
-        <p className={`traffic-badge ${booth.traffic_level}`}>
-          {trafficLabels[booth.traffic_level]}
-        </p>
+        <div className="badge-row">
+          <p className={`traffic-badge ${booth.traffic_level}`}>
+            {trafficLabels[booth.traffic_level]}
+          </p>
+          <p className="source-badge">{sourceLabels[booth.data_source]}</p>
+        </div>
         <h3>{booth.name}</h3>
         <p>{booth.address}</p>
         <p className="muted">
           {booth.constituency} constituency, {booth.distance_km.toFixed(1)} km away
         </p>
+        {!booth.is_official_assignment ? (
+          <p className="verification-note">
+            Nearby place only. Verify your assigned booth with ECI before voting.
+          </p>
+        ) : null}
       </div>
 
       <dl className="duration-grid">

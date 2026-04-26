@@ -11,7 +11,7 @@ interface GeolocationState {
 }
 
 interface UseGeolocationResult extends GeolocationState {
-  requestLocation: () => void;
+  requestLocation: () => Promise<LatLng | null>;
 }
 
 export function useGeolocation(): UseGeolocationResult {
@@ -22,7 +22,7 @@ export function useGeolocation(): UseGeolocationResult {
     denied: false,
   });
 
-  const requestLocation = useCallback(() => {
+  const requestLocation = useCallback((): Promise<LatLng | null> => {
     if (!navigator.geolocation) {
       setState({
         location: null,
@@ -30,7 +30,7 @@ export function useGeolocation(): UseGeolocationResult {
         error: "Geolocation is not supported by this browser.",
         denied: false,
       });
-      return;
+      return Promise.resolve(null);
     }
 
     setState((current) => ({
@@ -40,35 +40,40 @@ export function useGeolocation(): UseGeolocationResult {
       denied: false,
     }));
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setState({
-          location: {
+    return new Promise((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          },
-          loading: false,
-          error: null,
-          denied: false,
-        });
-      },
-      (error) => {
-        const denied = error.code === error.PERMISSION_DENIED;
-        setState({
-          location: null,
-          loading: false,
-          error: denied
-            ? "Location permission was denied. Use manual search instead."
-            : "Unable to determine your location right now.",
-          denied,
-        });
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
-      },
-    );
+          };
+          setState({
+            location,
+            loading: false,
+            error: null,
+            denied: false,
+          });
+          resolve(location);
+        },
+        (error) => {
+          const denied = error.code === error.PERMISSION_DENIED;
+          setState({
+            location: null,
+            loading: false,
+            error: denied
+              ? "Location permission was denied. Use manual search instead."
+              : "Unable to determine your location right now.",
+            denied,
+          });
+          resolve(null);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000,
+        },
+      );
+    });
   }, []);
 
   return {

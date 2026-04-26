@@ -20,6 +20,9 @@ async def test_find_nearby_returns_sorted_by_distance() -> None:
     distances = [booth.distance_km for booth in response.booths]
     assert distances == sorted(distances)
     assert response.suggested_visit_time.window == "10:00-11:30"
+    assert "official assigned booth" in response.source_note
+    assert response.official_verification_url.startswith("https://electoralsearch")
+    assert all(not booth.is_official_assignment for booth in response.booths)
 
 
 def test_nearby_request_validates_radius_bounds() -> None:

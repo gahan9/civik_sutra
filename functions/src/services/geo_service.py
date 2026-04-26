@@ -26,6 +26,11 @@ from src.models.booth import (
 PLACES_TEXT_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/json"
 MAX_LIVE_BOOTHS = 3
+ECI_VOTER_SEARCH_URL = "https://electoralsearch.eci.gov.in/"
+SOURCE_NOTE = (
+    "Nearby results are physical polling places from Maps/public fallback data. "
+    "Your official assigned booth must be verified with the Election Commission."
+)
 
 
 class GeoService:
@@ -51,6 +56,8 @@ class GeoService:
                     suggested_visit_time=self.suggest_best_visit_time(
                         live_booths[0].id
                     ),
+                    source_note=SOURCE_NOTE,
+                    official_verification_url=ECI_VOTER_SEARCH_URL,
                 )
 
         booths = [
@@ -65,6 +72,8 @@ class GeoService:
             suggested_visit_time=self.suggest_best_visit_time(
                 booths[0].id if booths else "default"
             ),
+            source_note=SOURCE_NOTE,
+            official_verification_url=ECI_VOTER_SEARCH_URL,
         )
 
     async def get_directions(self, request: DirectionsRequest) -> DirectionsResult:
@@ -116,7 +125,7 @@ class GeoService:
             voter_name=None,
             assigned_booth=None,
             constituency=None,
-            nvsp_url=f"https://electoralsearch.eci.gov.in/?epic={encoded_epic}",
+            nvsp_url=f"{ECI_VOTER_SEARCH_URL}?epic={encoded_epic}",
             instructions=(
                 "Use the Election Commission voter search portal to verify your "
                 "assigned booth. CivikSutra does not store or display private "
@@ -263,6 +272,9 @@ class GeoService:
             drive_duration_min=drive_minutes,
             traffic_level="low",
             facilities=[],
+            data_source="google_maps",
+            is_official_assignment=False,
+            verification_url=ECI_VOTER_SEARCH_URL,
         )
 
     async def _fetch_json(
@@ -311,6 +323,9 @@ class GeoService:
                 drive_duration_min=4,
                 traffic_level="low",
                 facilities=["wheelchair_ramp", "drinking_water"],
+                data_source="demo_fallback",
+                is_official_assignment=False,
+                verification_url=ECI_VOTER_SEARCH_URL,
             ),
             BoothResult(
                 id="booth_community_hall_sector5",
@@ -323,6 +338,9 @@ class GeoService:
                 drive_duration_min=6,
                 traffic_level="moderate",
                 facilities=["drinking_water", "shade"],
+                data_source="demo_fallback",
+                is_official_assignment=False,
+                verification_url=ECI_VOTER_SEARCH_URL,
             ),
             BoothResult(
                 id="booth_model_school_central",
@@ -335,5 +353,8 @@ class GeoService:
                 drive_duration_min=7,
                 traffic_level="low",
                 facilities=["wheelchair_ramp", "first_aid"],
+                data_source="demo_fallback",
+                is_official_assignment=False,
+                verification_url=ECI_VOTER_SEARCH_URL,
             ),
         ]

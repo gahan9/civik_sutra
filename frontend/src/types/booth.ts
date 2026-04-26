@@ -1,5 +1,6 @@
 export type TrafficLevel = "low" | "moderate" | "heavy";
 export type TravelMode = "walking" | "driving" | "transit";
+export type BoothDataSource = "google_maps" | "demo_fallback";
 
 export interface LatLng {
   lat: number;
@@ -26,6 +27,9 @@ export interface BoothResult {
   drive_duration_min: number | null;
   traffic_level: TrafficLevel;
   facilities: string[];
+  data_source: BoothDataSource;
+  is_official_assignment: boolean;
+  verification_url: string;
 }
 
 export interface VisitTimeSuggestion {
@@ -36,6 +40,8 @@ export interface VisitTimeSuggestion {
 export interface NearbyResponse {
   booths: BoothResult[];
   suggested_visit_time: VisitTimeSuggestion;
+  source_note: string;
+  official_verification_url: string;
 }
 
 export interface DirectionsRequest {

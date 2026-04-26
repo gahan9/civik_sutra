@@ -15,5 +15,7 @@ describe("BoothFinder", () => {
       screen.getByRole("button", { name: /use my current location/i }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText(/pincode or address/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/epic number/i)).toBeInTheDocument();
+    expect(screen.getByText(/official verification required/i)).toBeInTheDocument();
   });
 });

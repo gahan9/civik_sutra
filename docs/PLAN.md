@@ -28,18 +28,18 @@ Phase 1: Foundation        ──▶  Phase 2: Intelligence    ──▶  Phase 
 | 1.2 | Vite + React + Tailwind scaffold with PWA manifest | frontend | `npm run build` passes | `[ ]` |
 | 1.3 | Firebase Cloud Functions scaffold (Python 3.12) | functions | `pytest functions/tests/` | `[ ]` |
 | 1.4 | Core config module (`core/config.py`) with Pydantic Settings | functions | `test_config.py` | `[ ]` |
-| 1.5 | GPS location hook (`useGeolocation`) | frontend | `hooks/__tests__/useGeolocation.test.ts` | `[ ]` |
+| 1.5 | GPS location hook (`useGeolocation`) | frontend | `hooks/__tests__/useGeolocation.test.ts` | `[x]` |
 | 1.6 | Booth data model + Firestore schema | functions | `test_models.py` | `[ ]` |
 | 1.7 | `GeoService.find_nearby_booths(lat, lng, radius)` | functions | `test_geo_service.py::test_find_nearby` | `[ ]` |
 | 1.8 | `GeoService.get_directions(origin, destination)` | functions | `test_geo_service.py::test_directions` | `[ ]` |
 | 1.9 | `GeoService.get_traffic_estimate(origin, destination)` | functions | `test_geo_service.py::test_traffic` | `[ ]` |
 | 1.10 | `GeoService.suggest_best_visit_time(booth_id)` | functions | `test_geo_service.py::test_visit_time` | `[ ]` |
 | 1.11 | Booth verification link to ECI/NVSP | functions | `test_geo_service.py::test_verify_booth` | `[ ]` |
-| 1.12 | Map component with booth markers | frontend | `components/booth/__tests__/BoothMap.test.tsx` | `[ ]` |
-| 1.13 | Booth detail panel (address, timing, traffic) | frontend | `components/booth/__tests__/BoothDetail.test.tsx` | `[ ]` |
-| 1.14 | API route: `POST /booth/nearby` | functions | `test_booth_api.py::test_nearby_endpoint` | `[ ]` |
-| 1.15 | API route: `POST /booth/directions` | functions | `test_booth_api.py::test_directions_endpoint` | `[ ]` |
-| 1.16 | API route: `GET /booth/verify/{epic_number}` | functions | `test_booth_api.py::test_verify_endpoint` | `[ ]` |
+| 1.12 | Map component with booth markers | frontend | `components/booth/__tests__/BoothMap.test.tsx` | `[x]` |
+| 1.13 | Booth detail panel (address, timing, traffic) | frontend | `components/booth/__tests__/BoothDetail.test.tsx` | `[x]` |
+| 1.14 | API route: `POST /booth/nearby` | functions | `test_booth_api.py::test_nearby_endpoint` | `[x]` |
+| 1.15 | API route: `POST /booth/directions` | functions | `test_booth_api.py::test_directions_endpoint` | `[x]` |
+| 1.16 | API route: `GET /booth/verify/{epic_number}` | functions | `test_booth_api.py::test_verify_endpoint` | `[x]` |
 
 ### Exit Criteria
 - [ ] User grants GPS permission and sees nearby booths on a map
