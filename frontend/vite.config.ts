@@ -8,6 +8,7 @@ export default defineConfig({
     proxy: {
       "/booth": "http://127.0.0.1:5001",
       "/candidate": "http://127.0.0.1:5001",
+      "/manifesto": "http://127.0.0.1:5001",
       "/health": "http://127.0.0.1:5001",
     },
   },

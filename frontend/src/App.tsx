@@ -2,9 +2,10 @@ import { useState } from "react";
 
 import { BoothFinder } from "./components/booth/BoothFinder";
 import { CandidateSearch } from "./components/candidate/CandidateSearch";
+import { ManifestoComparison } from "./components/manifesto/ManifestoComparison";
 
 
-type ActiveTab = "booth" | "candidate";
+type ActiveTab = "booth" | "candidate" | "manifesto";
 
 export function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("booth");
@@ -27,9 +28,18 @@ export function App() {
           >
             Candidate Intelligence
           </button>
+          <button
+            type="button"
+            className={activeTab === "manifesto" ? "active" : ""}
+            onClick={() => setActiveTab("manifesto")}
+          >
+            Manifestos
+          </button>
         </nav>
       </header>
-      {activeTab === "booth" ? <BoothFinder /> : <CandidateSearch />}
+      {activeTab === "booth" && <BoothFinder />}
+      {activeTab === "candidate" && <CandidateSearch />}
+      {activeTab === "manifesto" && <ManifestoComparison />}
     </>
   );
 }

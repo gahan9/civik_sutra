@@ -642,6 +642,96 @@ input {
   margin-top: 1rem;
 }
 
+/* --- Manifesto Comparison --- */
+
+.manifesto-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid #dce5f5;
+  border-radius: 24px;
+  margin: 1rem 0;
+  padding: 1.25rem;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgb(20 45 90 / 8%);
+}
+
+.manifesto-selector label {
+  font-weight: 700;
+}
+
+.party-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.party-chip {
+  min-height: 38px;
+  border: 2px solid #dce5f5;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  color: #37506f;
+  background: #f7faff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.party-chip--active {
+  border-color: #1f5eff;
+  color: #ffffff;
+  background: #1f5eff;
+}
+
+.manifesto-promises {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.manifesto-promises li {
+  margin-bottom: 0.25rem;
+}
+
+.promise-section {
+  margin: 1rem 0;
+}
+
+.promise-section h3 {
+  margin: 0 0 0.5rem;
+}
+
+.promise-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.promise-fulfilled {
+  color: #0f6b3e;
+  background: #dff8eb;
+}
+
+.promise-partial {
+  color: #8a5a00;
+  background: #fff2c6;
+}
+
+.promise-not-met {
+  color: #9b1c1c;
+  background: #ffe2e2;
+}
+
+.promise-ongoing {
+  color: #274168;
+  background: #eef4ff;
+}
+
 @media (max-width: 860px) {
   .impact-grid,
   .trust-panel {

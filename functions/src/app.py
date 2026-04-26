@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.booth import router as booth_router
 from src.api.candidate import router as candidate_router
+from src.api.manifesto import router as manifesto_router
 
 
 app = FastAPI(
@@ -28,6 +29,7 @@ app.add_middleware(
 
 app.include_router(booth_router)
 app.include_router(candidate_router)
+app.include_router(manifesto_router)
 
 
 @app.get("/health")

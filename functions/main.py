@@ -12,8 +12,10 @@ from src.models.candidate import (
     CandidateSearchRequest,
     CompareRequest,
 )
+from src.models.manifesto import ManifestoCompareRequest
 from src.services.candidate_service import CandidateService
 from src.services.geo_service import GeoService
+from src.services.manifesto_service import ManifestoService
 
 
 @https_fn.on_request(region="asia-south1")
@@ -23,6 +25,7 @@ def api(req: https_fn.Request) -> https_fn.Response:
 
     geo = GeoService()
     candidate_svc = CandidateService()
+    manifesto_svc = ManifestoService()
     path = req.path.rstrip("/") or "/"
 
     try:
@@ -74,6 +77,19 @@ def api(req: https_fn.Request) -> https_fn.Response:
                 req.get_json(silent=True) or {},
             )
             result = asyncio.run(candidate_svc.compare(payload.candidate_ids))
+            return _response(result.model_dump())
+
+        if req.method == "POST" and path == "/manifesto/compare":
+            payload = ManifestoCompareRequest.model_validate(
+                req.get_json(silent=True) or {},
+            )
+            result = asyncio.run(
+                manifesto_svc.compare_manifestos(
+                    party_names=payload.party_names,
+                    categories=payload.categories,
+                    include_past_promises=payload.include_past_promises,
+                )
+            )
             return _response(result.model_dump())
 
     except ValidationError as error:
