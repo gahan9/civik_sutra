@@ -1,0 +1,100 @@
+{
+  "app": {
+    "title": "Election Assistant",
+    "subtitle": "Your guide to informed voting"
+  },
+  "nav": {
+    "booth": "Booth Finder",
+    "candidates": "Candidates",
+    "manifesto": "Manifestos",
+    "voter": "Voter Guide",
+    "chat": "Ask AI"
+  },
+  "booth": {
+    "title": "Find Your Polling Booth",
+    "searchPlaceholder": "Enter pincode or address",
+    "useGps": "Use my location",
+    "nearby": "Nearby Booths",
+    "directions": "Get Directions",
+    "verify": "Verify Booth",
+    "traffic": {
+      "low": "Low traffic",
+      "moderate": "Moderate traffic",
+      "heavy": "Heavy traffic"
+    },
+    "bestTime": "Best time to visit"
+  },
+  "candidate": {
+    "title": "Find Your Candidates",
+    "search": "Search constituency",
+    "compare": "Compare Selected",
+    "education": "Education",
+    "criminal": "Criminal Cases",
+    "assets": "Total Assets",
+    "background": "Full Background",
+    "noResults": "No candidates found"
+  },
+  "manifesto": {
+    "title": "Compare Party Manifestos",
+    "subtitle": "Side-by-side analysis of party promises across key policy areas.",
+    "selectParties": "Select parties to compare (2-4):",
+    "compareBtn": "Compare Manifestos",
+    "comparing": "Comparing...",
+    "aiAnalysis": "AI Analysis",
+    "pastPromises": "Past Promise Delivery",
+    "share": "Share Comparison",
+    "sources": "Sources"
+  },
+  "voter": {
+    "title": "Be Prepared to Vote",
+    "subtitle": "Everything you need to know before, during, and after voting.",
+    "eligibility": "Am I Eligible?",
+    "checklist": "Voting Checklist",
+    "applyCard": "Apply for Voter ID",
+    "procedure": "Booth Procedure",
+    "age": "What is your age?",
+    "citizen": "Are you an Indian citizen?",
+    "registered": "Are you registered as a voter?",
+    "state": "State of residence:",
+    "checkBtn": "Check Eligibility",
+    "eligible": "You ARE eligible to vote!",
+    "notEligible": "You are not eligible to vote",
+    "needRegister": "You need to register first",
+    "itemsCompleted": "{{done}} of {{total}} items completed",
+    "beforeLeave": "Before You Leave",
+    "atBooth": "At The Booth",
+    "doNot": "Do NOT:",
+    "acceptedIds": "Accepted Photo IDs (any one)",
+    "accessibility": "Accessibility",
+    "shareChecklist": "Share Checklist",
+    "applyTitle": "Apply for Voter ID (EPIC)",
+    "stepOf": "Step {{current}} of {{total}}",
+    "previous": "Previous",
+    "nextStep": "Next Step",
+    "importantDates": "Important Dates",
+    "trackStatus": "Track Application Status",
+    "procedureTitle": "Voting Procedure at the Booth",
+    "procedureSubtitle": "Step-by-step guide to casting your vote using EVM and VVPAT.",
+    "whatIsNota": "What is NOTA?",
+    "aboutEvmVvpat": "About EVM & VVPAT"
+  },
+  "chat": {
+    "title": "Ask CivikSutra",
+    "subtitle": "Your AI-powered guide to the Indian election process.",
+    "placeholder": "Type your question...",
+    "send": "Send",
+    "quickQuestions": "Quick Questions:",
+    "thinking": "Thinking...",
+    "errorResponse": "I'm sorry, I couldn't process your question right now."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "share": "Share",
+    "download": "Download",
+    "yes": "Yes",
+    "no": "No",
+    "notSure": "Not sure"
+  }
+}

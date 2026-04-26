@@ -12,10 +12,10 @@ A mobile-first web application that meets voters where they are -- physically an
 |--------|-------------|--------|
 | [Booth Finder](docs/feature-booth-finder.md) | GPS-based polling booth discovery, map navigation, traffic-aware timing, and ECI verification handoff | `deployed` |
 | [Candidate Intelligence](docs/feature-candidate-intelligence.md) | Background search, comparative analysis, criminal/asset/education data | `implemented` |
-| [Manifesto Comparison](docs/feature-manifesto-comparison.md) | Side-by-side party manifesto analysis and promise tracking | `planned` |
-| [Assistant Chat](docs/feature-assistant-chat.md) | Gemini-powered conversational election guide with grounding | `planned` |
-| [Voter Readiness](docs/feature-voter-readiness.md) | Eligibility check, election card application guide, voting day checklist | `planned` |
-| [Multilingual](docs/feature-multilingual.md) | Hindi, English, and regional language support via Gemini translation | `planned` |
+| [Manifesto Comparison](docs/feature-manifesto-comparison.md) | Side-by-side party manifesto analysis and promise tracking | `implemented` |
+| [Assistant Chat](docs/feature-assistant-chat.md) | Gemini-powered conversational election guide with grounding | `implemented` |
+| [Voter Readiness](docs/feature-voter-readiness.md) | Eligibility check, election card application guide, voting day checklist | `implemented` |
+| [Multilingual](docs/feature-multilingual.md) | Hindi, English, and regional language support via Gemini translation | `implemented` |
 
 ## Architecture
 
