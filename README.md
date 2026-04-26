@@ -10,8 +10,8 @@ A mobile-first web application that meets voters where they are -- physically an
 
 | Module | Description | Status |
 |--------|-------------|--------|
-| [Booth Finder](docs/feature-booth-finder.md) | GPS-based polling booth discovery, map navigation, live traffic for optimal visit timing | `planned` |
-| [Candidate Intelligence](docs/feature-candidate-intelligence.md) | Background search, comparative analysis, criminal/asset/education data | `planned` |
+| [Booth Finder](docs/feature-booth-finder.md) | GPS-based polling booth discovery, map navigation, traffic-aware timing, and ECI verification handoff | `deployed` |
+| [Candidate Intelligence](docs/feature-candidate-intelligence.md) | Background search, comparative analysis, criminal/asset/education data | `implemented` |
 | [Manifesto Comparison](docs/feature-manifesto-comparison.md) | Side-by-side party manifesto analysis and promise tracking | `planned` |
 | [Assistant Chat](docs/feature-assistant-chat.md) | Gemini-powered conversational election guide with grounding | `planned` |
 | [Voter Readiness](docs/feature-voter-readiness.md) | Eligibility check, election card application guide, voting day checklist | `planned` |
@@ -150,6 +150,21 @@ cp .env.example .env
 firebase emulators:start    # Functions + Firestore
 cd frontend && npm run dev  # Vite dev server at :5173
 ```
+
+## Live Demo
+
+Deployed Firebase app: https://civiksutra-2604261729.web.app
+
+Current implemented slice:
+- Booth Finder UI with GPS and manual search entry points.
+- Nearby polling-place results with map rendering and fallback map preview.
+- Walking/driving time, traffic level, and suggested best visit window.
+- ECI verification handoff for official assigned booth lookup.
+- Privacy stance: no voter-roll or EPIC details are stored by CivikSutra.
+
+Important civic accuracy note: nearby polling places are not guaranteed to be the
+voter's official assigned booth. The app routes users to ECI Electoral Search for
+authoritative verification.
 
 ## Delivery Plan
 

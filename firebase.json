@@ -11,6 +11,13 @@
         }
       },
       {
+        "source": "/candidate/**",
+        "function": {
+          "functionId": "api",
+          "region": "asia-south1"
+        }
+      },
+      {
         "source": "/health",
         "function": {
           "functionId": "api",

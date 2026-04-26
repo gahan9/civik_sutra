@@ -4,12 +4,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.booth import router as booth_router
+from src.api.candidate import router as candidate_router
 
 
 app = FastAPI(
     title="CivikSutra API",
     description="Election process education APIs.",
-    version="0.1.0",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -26,6 +27,7 @@ app.add_middleware(
 )
 
 app.include_router(booth_router)
+app.include_router(candidate_router)
 
 
 @app.get("/health")
