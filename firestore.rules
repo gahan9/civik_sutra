@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /booths/{doc=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /candidates/{doc=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /manifestos/{doc=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /sessions/{sessionId} {
+      allow read: if request.auth != null
+                  && request.auth.uid == resource.data.uid;
+      allow write: if false;
+    }
+    match /rate_limits/{doc} {
+      allow read, write: if false;
+    }
+  }
+}
