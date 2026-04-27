@@ -1,23 +1,22 @@
 from __future__ import annotations
 
-
-import asyncio
 import json
+import asyncio
 from typing import Any
 
-from firebase_functions import https_fn
 from pydantic import ValidationError
+from firebase_functions import https_fn
 
-from src.models.booth import DirectionsRequest, NearbyRequest
-from src.models.candidate import (
-    CandidateSearchRequest,
-    CompareRequest,
-)
 from src.models.chat import ChatRequest
+from src.models.booth import NearbyRequest, DirectionsRequest
+from src.models.candidate import (
+    CompareRequest,
+    CandidateSearchRequest,
+)
 from src.models.manifesto import ManifestoCompareRequest
-from src.services.candidate_service import CandidateService
-from src.services.chat_service import ChatService
 from src.services.geo_service import GeoService
+from src.services.chat_service import ChatService
+from src.services.candidate_service import CandidateService
 from src.services.manifesto_service import ManifestoService
 
 

@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Depends, APIRouter, HTTPException
 
 from src.models.candidate import (
+    CompareRequest,
     BackgroundReport,
+    ComparisonResult,
     CandidateSearchRequest,
     CandidateSearchResponse,
-    CompareRequest,
-    ComparisonResult,
 )
 from src.services.candidate_service import CandidateService
 

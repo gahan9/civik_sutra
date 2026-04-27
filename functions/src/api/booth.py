@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-
-from fastapi import APIRouter, Depends
+from fastapi import Depends, APIRouter
 
 from src.models.booth import (
-    BoothVerificationResult,
-    DirectionsRequest,
-    DirectionsResult,
     NearbyRequest,
     NearbyResponse,
+    DirectionsResult,
+    DirectionsRequest,
+    BoothVerificationResult,
 )
 from src.services.geo_service import GeoService
 

@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+from fastapi import Depends, APIRouter
 
-from fastapi import APIRouter, Depends
-
-from src.models.manifesto import ManifestoCompareRequest, ManifestoComparison
+from src.models.manifesto import ManifestoComparison, ManifestoCompareRequest
 from src.services.manifesto_service import ManifestoService
 
 router = APIRouter(prefix="/manifesto", tags=["manifesto"])

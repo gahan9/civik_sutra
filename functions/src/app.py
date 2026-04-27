@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.assistant import router as assistant_router
 from src.api.booth import router as booth_router
+from src.api.assistant import router as assistant_router
 from src.api.candidate import router as candidate_router
 from src.api.manifesto import router as manifesto_router
 

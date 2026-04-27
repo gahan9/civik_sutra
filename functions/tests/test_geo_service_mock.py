@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from src.models.booth import DirectionsRequest, LatLng
+from src.models.booth import LatLng, DirectionsRequest
 from src.services.geo_service import GeoService
 
 

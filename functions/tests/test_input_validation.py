@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-
 import pytest
 from pydantic import ValidationError
 
-from src.models.booth import DirectionsRequest, NearbyRequest
-from src.models.candidate import CandidateSearchRequest, CompareRequest
 from src.models.chat import ChatRequest
+from src.models.booth import NearbyRequest, DirectionsRequest
+from src.models.candidate import CompareRequest, CandidateSearchRequest
 from src.models.manifesto import ManifestoCompareRequest
 
 

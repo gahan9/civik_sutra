@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-
-from fastapi import APIRouter, Depends
+from fastapi import Depends, APIRouter
 
 from src.models.chat import ChatRequest, ChatResponse
 from src.services.chat_service import ChatService

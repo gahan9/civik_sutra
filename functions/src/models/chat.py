@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-
-from datetime import datetime
 from typing import Any, Literal
+from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import Field, BaseModel, ConfigDict
 
 from src.models.booth import LatLng
 

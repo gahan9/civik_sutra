@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+from typing import Self, Literal
 
-from typing import Literal, Self
-
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import Field, BaseModel, ConfigDict, model_validator
 
 
 class StrictModel(BaseModel):

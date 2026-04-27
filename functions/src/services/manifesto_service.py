@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-
-import asyncio
-import json
 import os
 import re
+import json
 import time
+import asyncio
 import urllib.request
 from typing import Any, cast
 
 import structlog
 
 from src.models.manifesto import (
-    ManifestoComparison,
     ManifestoData,
-    ManifestoSource,
     PromiseTracker,
+    ManifestoSource,
+    ManifestoComparison,
 )
 
 logger = structlog.get_logger(__name__)

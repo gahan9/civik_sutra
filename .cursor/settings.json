@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "postman": {
+      "enabled": true
+    },
+    "atlassian": {
+      "enabled": true
+    }
+  }
+}

@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-
-import asyncio
-import json
 import re
+import json
+import asyncio
 import urllib.parse
 import urllib.request
-from html.parser import HTMLParser
 from typing import Any
+from html.parser import HTMLParser
 
 import structlog
 

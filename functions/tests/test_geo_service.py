@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-
-
 import pytest
 from pydantic import ValidationError
 
-from src.models.booth import DirectionsRequest, LatLng, NearbyRequest
+from src.models.booth import LatLng, NearbyRequest, DirectionsRequest
 from src.services.geo_service import GeoService
 
 

@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-
-import asyncio
-import json
 import os
 import re
+import json
 import time
+import asyncio
 import urllib.parse
 import urllib.request
 from typing import Any, cast
@@ -13,14 +12,14 @@ from typing import Any, cast
 import structlog
 
 from src.models.candidate import (
+    NewsItem,
     AssetBreakdown,
+    SourceCitation,
+    GroundingResult,
     BackgroundReport,
-    CandidateSearchResponse,
     CandidateSummary,
     ComparisonResult,
-    GroundingResult,
-    NewsItem,
-    SourceCitation,
+    CandidateSearchResponse,
 )
 from src.services.scraper_service import ScraperService
 

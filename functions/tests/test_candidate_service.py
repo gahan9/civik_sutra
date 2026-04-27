@@ -1,20 +1,17 @@
 from __future__ import annotations
 
-
-
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 from pydantic import ValidationError
 
 from src.models.candidate import (
-    CandidateSearchRequest,
-    CandidateSummary,
+    NewsItem,
     CompareRequest,
     GroundingResult,
-    NewsItem,
+    CandidateSummary,
     RawCandidateData,
-    SourceCitation,
+    CandidateSearchRequest,
 )
 from src.services.candidate_service import CandidateService
 
