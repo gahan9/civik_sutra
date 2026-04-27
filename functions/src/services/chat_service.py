@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+
 import asyncio
 import json
 import os
-import re
 import time
 import urllib.request
 from typing import Any
@@ -38,8 +38,12 @@ SYSTEM_PROMPT = """You are CivikSutra, an impartial election education assistant
 Indian elections. Your role is to help voters understand the election process,
 find their polling booths, research candidates, and make informed decisions.
 
+CRITICAL GUARDRAILS:
+1. OUT OF SCOPE: If a user asks about anything unrelated to Indian elections, civic duties, or the democratic process, you MUST refuse to answer. Reply politely that you are an election education assistant and can only answer questions related to Indian elections.
+2. NO HALLUCINATION: If you do not know the answer based on verified election data, state clearly that you do not know. Do not guess or invent policies, dates, or candidate information.
+3. NEUTRALITY: Never endorse, criticize, or recommend any candidate, political party, or ideology. Present facts neutrally.
+
 Rules:
-- Never endorse or recommend any candidate or party
 - Always cite sources when stating facts
 - If unsure, say so and suggest where to find accurate information
 - Keep responses concise but thorough (under 300 words)
@@ -85,6 +89,7 @@ class ChatService:
     """Gemini-powered election assistant with conversation memory."""
 
     def __init__(self, gemini_api_key: str | None = None) -> None:
+        """Execute __init__ operation."""
         self._gemini_api_key = gemini_api_key or os.getenv("EP_GEMINI_API_KEY")
         self._sessions: dict[str, list[dict[str, str]]] = {}
         self._session_timestamps: dict[str, float] = {}
@@ -95,6 +100,7 @@ class ChatService:
         session_id: str,
         language: str = "en",
     ) -> ChatResponse:
+        """Execute chat operation."""
         history = self._load_history(session_id)
         history.append({"role": "user", "content": message})
 
@@ -124,6 +130,7 @@ class ChatService:
         )
 
     def get_quick_questions(self, language: str = "en") -> list[str]:
+        """Execute get_quick_questions operation."""
         return QUICK_QUESTIONS.get(language, QUICK_QUESTIONS["en"])
 
     def _load_history(self, session_id: str) -> list[dict[str, str]]:
@@ -137,7 +144,9 @@ class ChatService:
         return history[-MAX_HISTORY_MESSAGES:]
 
     def _save_history(
-        self, session_id: str, history: list[dict[str, str]],
+        self,
+        session_id: str,
+        history: list[dict[str, str]],
     ) -> None:
         self._sessions[session_id] = history[-MAX_HISTORY_MESSAGES:]
         self._session_timestamps[session_id] = time.time()
@@ -152,49 +161,50 @@ class ChatService:
             return ""
 
         model = "gemini-2.0-flash"
-        url = (
-            f"{GEMINI_API_URL}/{model}:generateContent"
-            f"?key={self._gemini_api_key}"
-        )
+        url = f"{GEMINI_API_URL}/{model}:generateContent" f"?key={self._gemini_api_key}"
 
         contents: list[dict[str, Any]] = []
         for msg in history:
             role = "user" if msg["role"] == "user" else "model"
-            contents.append({
-                "role": role,
-                "parts": [{"text": msg["content"]}],
-            })
+            contents.append(
+                {
+                    "role": role,
+                    "parts": [{"text": msg["content"]}],
+                }
+            )
 
-        body = json.dumps({
-            "system_instruction": {
-                "parts": [{"text": system_prompt}],
-            },
-            "contents": contents,
-            "generationConfig": {
-                "temperature": 0.3,
-                "topP": 0.8,
-                "topK": 40,
-                "maxOutputTokens": 1024,
-            },
-            "safetySettings": [
-                {
-                    "category": "HARM_CATEGORY_HATE_SPEECH",
-                    "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+        body = json.dumps(
+            {
+                "system_instruction": {
+                    "parts": [{"text": system_prompt}],
                 },
-                {
-                    "category": "HARM_CATEGORY_HARASSMENT",
-                    "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+                "contents": contents,
+                "generationConfig": {
+                    "temperature": 0.3,
+                    "topP": 0.8,
+                    "topK": 40,
+                    "maxOutputTokens": 1024,
                 },
-                {
-                    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                    "threshold": "BLOCK_LOW_AND_ABOVE",
-                },
-                {
-                    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                    "threshold": "BLOCK_MEDIUM_AND_ABOVE",
-                },
-            ],
-        }).encode("utf-8")
+                "safetySettings": [
+                    {
+                        "category": "HARM_CATEGORY_HATE_SPEECH",
+                        "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+                    },
+                    {
+                        "category": "HARM_CATEGORY_HARASSMENT",
+                        "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+                    },
+                    {
+                        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                        "threshold": "BLOCK_LOW_AND_ABOVE",
+                    },
+                    {
+                        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                        "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+                    },
+                ],
+            }
+        ).encode("utf-8")
 
         def _do_call() -> str:
             req = urllib.request.Request(
@@ -210,7 +220,7 @@ class ChatService:
                 if candidates:
                     parts = candidates[0].get("content", {}).get("parts", [])
                     if parts:
-                        return parts[0].get("text", "")
+                        return str(parts[0].get("text", ""))
             except (OSError, TimeoutError, json.JSONDecodeError) as exc:
                 logger.warning("gemini_chat_failed", error=str(exc))
             return ""
@@ -226,7 +236,9 @@ class ChatService:
 
         if any(kw.lower() in text.lower() for kw in eci_keywords):
             citations.append(
-                SourceCitation(source="Election Commission of India", url="https://eci.gov.in"),
+                SourceCitation(
+                    source="Election Commission of India", url="https://eci.gov.in"
+                ),
             )
         if any(kw.lower() in text.lower() for kw in nvsp_keywords):
             citations.append(
@@ -245,19 +257,23 @@ class ChatService:
 
         booth_keywords = ["polling booth", "booth", "where do i vote", "nearest booth"]
         if any(kw in lower for kw in booth_keywords):
-            tool_calls.append(ToolCallRecord(
-                tool_name="booth_finder",
-                args={},
-                result_summary="Use the Booth Finder tab for GPS-based booth discovery",
-            ))
+            tool_calls.append(
+                ToolCallRecord(
+                    tool_name="booth_finder",
+                    args={},
+                    result_summary="Use the Booth Finder tab for GPS-based booth discovery",
+                )
+            )
 
         candidate_keywords = ["candidate", "who is contesting", "compare candidates"]
         if any(kw in lower for kw in candidate_keywords):
-            tool_calls.append(ToolCallRecord(
-                tool_name="candidate_search",
-                args={},
-                result_summary="Use the Candidate Intelligence tab for detailed search",
-            ))
+            tool_calls.append(
+                ToolCallRecord(
+                    tool_name="candidate_search",
+                    args={},
+                    result_summary="Use the Candidate Intelligence tab for detailed search",
+                )
+            )
 
         return tool_calls
 

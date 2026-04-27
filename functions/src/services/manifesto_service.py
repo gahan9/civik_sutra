@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+
 import asyncio
 import json
 import os
 import re
 import time
 import urllib.request
-from typing import Any
+from typing import Any, cast
 
 import structlog
 
@@ -102,6 +103,7 @@ class ManifestoService:
     """Party manifesto comparison with AI-powered extraction and analysis."""
 
     def __init__(self, gemini_api_key: str | None = None) -> None:
+        """Execute __init__ operation."""
         self._gemini_api_key = gemini_api_key or os.getenv("EP_GEMINI_API_KEY")
         self._cache: dict[str, tuple[float, Any]] = {}
 
@@ -111,9 +113,8 @@ class ManifestoService:
         categories: list[str] | None = None,
         include_past_promises: bool = True,
     ) -> ManifestoComparison:
-        manifesto_tasks = [
-            self.fetch_manifesto(party) for party in party_names
-        ]
+        """Execute compare_manifestos operation."""
+        manifesto_tasks = [self.fetch_manifesto(party) for party in party_names]
         manifestos = await asyncio.gather(*manifesto_tasks)
 
         aligned = self._align_categories(manifestos, categories)
@@ -125,8 +126,7 @@ class ManifestoService:
             incumbent_parties = self._identify_incumbents(party_names)
             if incumbent_parties:
                 promise_tasks = [
-                    self.track_past_promises(party, 2019)
-                    for party in incumbent_parties
+                    self.track_past_promises(party, 2019) for party in incumbent_parties
                 ]
                 results = await asyncio.gather(*promise_tasks)
                 past_promises = dict(zip(incumbent_parties, results))
@@ -148,11 +148,12 @@ class ManifestoService:
         )
 
     async def fetch_manifesto(self, party_name: str) -> ManifestoData:
+        """Execute fetch_manifesto operation."""
         cache_key = f"manifesto:{party_name.lower().strip()}"
         cached = self._get_cached(cache_key)
         if cached:
             logger.info("manifesto_cache_hit", party=party_name)
-            return cached
+            return cast(ManifestoData, cached)
 
         if self._gemini_api_key:
             prompt = EXTRACTION_PROMPT.format(party_name=party_name)
@@ -171,12 +172,15 @@ class ManifestoService:
         return manifesto
 
     async def track_past_promises(
-        self, party_name: str, election_year: int,
+        self,
+        party_name: str,
+        election_year: int,
     ) -> list[PromiseTracker]:
+        """Execute track_past_promises operation."""
         cache_key = f"promises:{party_name.lower()}:{election_year}"
         cached = self._get_cached(cache_key)
         if cached:
-            return cached
+            return cast(list[PromiseTracker], cached)
 
         if self._gemini_api_key:
             past_data = self._demo_past_promises(party_name)
@@ -201,7 +205,7 @@ class ManifestoService:
         manifestos: list[ManifestoData],
         filter_categories: list[str] | None,
     ) -> dict[str, dict[str, list[str]]]:
-        all_cats = set()
+        all_cats: set[str] = set()
         for m in manifestos:
             all_cats.update(m.categories.keys())
 
@@ -215,20 +219,20 @@ class ManifestoService:
             aligned[cat] = {}
             for m in manifestos:
                 aligned[cat][m.party_name] = m.categories.get(
-                    cat, ["Not addressed"],
+                    cat,
+                    ["Not addressed"],
                 )
 
         return aligned
 
     async def _generate_analysis(
-        self, manifestos: list[ManifestoData],
+        self,
+        manifestos: list[ManifestoData],
     ) -> str:
         if not self._gemini_api_key:
             return self._demo_analysis(manifestos)
 
-        data = {
-            m.party_name: m.categories for m in manifestos
-        }
+        data = {m.party_name: m.categories for m in manifestos}
         prompt = COMPARISON_PROMPT.format(
             manifesto_data_json=json.dumps(data, indent=2),
         )
@@ -244,8 +248,7 @@ class ManifestoService:
             data = json.loads(cleaned)
             if isinstance(data, dict):
                 return {
-                    k: (v if isinstance(v, list) else [str(v)])
-                    for k, v in data.items()
+                    k: (v if isinstance(v, list) else [str(v)]) for k, v in data.items()
                 }
         except json.JSONDecodeError:
             logger.warning("manifesto_json_parse_failed", text_length=len(text))
@@ -253,7 +256,9 @@ class ManifestoService:
         return {cat: ["Not addressed"] for cat in MANIFESTO_CATEGORIES}
 
     def _parse_promises(
-        self, text: str, party_name: str,
+        self,
+        text: str,
+        party_name: str,
     ) -> list[PromiseTracker]:
         if not text:
             return self._demo_past_promises(party_name)
@@ -279,17 +284,16 @@ class ManifestoService:
 
     async def _call_gemini(self, prompt: str) -> str:
         model = "gemini-2.0-flash"
-        url = (
-            f"{GEMINI_API_URL}/{model}:generateContent"
-            f"?key={self._gemini_api_key}"
-        )
-        body = json.dumps({
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": 0.2,
-                "maxOutputTokens": 2048,
-            },
-        }).encode("utf-8")
+        url = f"{GEMINI_API_URL}/{model}:generateContent" f"?key={self._gemini_api_key}"
+        body = json.dumps(
+            {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {
+                    "temperature": 0.2,
+                    "maxOutputTokens": 2048,
+                },
+            }
+        ).encode("utf-8")
 
         def _do_call() -> str:
             req = urllib.request.Request(
@@ -305,7 +309,7 @@ class ManifestoService:
                 if candidates:
                     parts = candidates[0].get("content", {}).get("parts", [])
                     if parts:
-                        return parts[0].get("text", "")
+                        return str(parts[0].get("text", ""))
             except (OSError, TimeoutError, json.JSONDecodeError) as exc:
                 logger.warning("gemini_call_failed", error=str(exc))
             return ""
@@ -409,7 +413,10 @@ class ManifestoService:
         }
         return demos.get(
             party_name.upper().strip(),
-            {cat: ["Manifesto details pending analysis"] for cat in MANIFESTO_CATEGORIES},
+            {
+                cat: ["Manifesto details pending analysis"]
+                for cat in MANIFESTO_CATEGORIES
+            },
         )
 
     @staticmethod

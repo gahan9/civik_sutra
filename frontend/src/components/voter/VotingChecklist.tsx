@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { ACCEPTED_PHOTO_IDS, CHECKLIST_ITEMS } from "../../data/voter-readiness";
-
+import {
+  ACCEPTED_PHOTO_IDS,
+  CHECKLIST_ITEMS,
+} from "../../data/voter-readiness";
 
 const STORAGE_KEY = "civiksutra-checklist";
 
@@ -17,7 +19,9 @@ function loadChecked(): Record<string, boolean> {
 function saveChecked(checked: Record<string, boolean>): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
-  } catch { /* localStorage unavailable */ }
+  } catch {
+    /* localStorage unavailable */
+  }
 }
 
 export function VotingChecklist() {
@@ -90,7 +94,10 @@ export function VotingChecklist() {
             </span>
           ))}
         </div>
-        <p className="muted" style={{ marginTop: "0.5rem", fontSize: "0.82rem" }}>
+        <p
+          className="muted"
+          style={{ marginTop: "0.5rem", fontSize: "0.82rem" }}
+        >
           ★ = Preferred. e-EPIC (digital) also accepted.
         </p>
       </div>

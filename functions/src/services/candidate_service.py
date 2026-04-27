@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 import asyncio
 import json
 import os
@@ -7,7 +8,7 @@ import re
 import time
 import urllib.parse
 import urllib.request
-from typing import Any
+from typing import Any, cast
 
 import structlog
 
@@ -79,13 +80,15 @@ class CandidateService:
         maps_api_key: str | None = None,
         scraper: ScraperService | None = None,
     ) -> None:
+        """Execute __init__ operation."""
         self._gemini_api_key = gemini_api_key or os.getenv("EP_GEMINI_API_KEY")
         self._maps_api_key = maps_api_key or os.getenv("EP_GOOGLE_MAPS_API_KEY")
         self._scraper = scraper or ScraperService()
         self._cache: dict[str, tuple[float, Any]] = {}
 
     async def search_by_constituency(
-        self, constituency: str,
+        self,
+        constituency: str,
     ) -> CandidateSearchResponse:
         """Search candidates for a constituency.
 
@@ -98,7 +101,7 @@ class CandidateService:
         cached = self._get_cached(cache_key)
         if cached:
             logger.info("candidate_cache_hit", constituency=constituency)
-            return cached
+            return cast(CandidateSearchResponse, cached)
 
         raw_candidates = await self._scraper.fetch_myneta_candidates(constituency)
         if raw_candidates:
@@ -128,7 +131,9 @@ class CandidateService:
         return response
 
     async def search_by_location(
-        self, lat: float, lng: float,
+        self,
+        lat: float,
+        lng: float,
     ) -> CandidateSearchResponse:
         """Reverse-geocode GPS to constituency, then search.
 
@@ -159,7 +164,9 @@ class CandidateService:
         return self._parse_grounding_response(response_text, candidate_name)
 
     async def background_check(
-        self, candidate_id: str, candidates: list[CandidateSummary] | None = None,
+        self,
+        candidate_id: str,
+        candidates: list[CandidateSummary] | None = None,
     ) -> BackgroundReport:
         """Comprehensive background report combining:
         1. Candidate base data (from search or lookup)
@@ -171,7 +178,9 @@ class CandidateService:
             candidate = self._stub_candidate(candidate_id)
 
         grounding = await self.grounding_search(
-            candidate.name, "Unknown", candidate.party,
+            candidate.name,
+            "Unknown",
+            candidate.party,
         )
 
         return BackgroundReport(
@@ -188,7 +197,9 @@ class CandidateService:
         )
 
     async def compare(
-        self, candidate_ids: list[str], candidates: list[CandidateSummary] | None = None,
+        self,
+        candidate_ids: list[str],
+        candidates: list[CandidateSummary] | None = None,
     ) -> ComparisonResult:
         """Build structured comparison matrix.
         1. Fetch background for each candidate (parallel)
@@ -196,16 +207,19 @@ class CandidateService:
         3. Call Gemini for analytical summary
         """
         reports = await asyncio.gather(
-            *(
-                self.background_check(cid, candidates)
-                for cid in candidate_ids
-            )
+            *(self.background_check(cid, candidates) for cid in candidate_ids)
         )
 
         dimensions = [
-            "education", "age", "criminal_cases", "total_assets",
-            "total_liabilities", "past_work", "key_promises",
-            "recent_news", "delivery_probability",
+            "education",
+            "age",
+            "criminal_cases",
+            "total_assets",
+            "total_liabilities",
+            "past_work",
+            "key_promises",
+            "recent_news",
+            "delivery_probability",
         ]
 
         matrix: dict[str, dict[str, str]] = {}
@@ -216,7 +230,11 @@ class CandidateService:
                 if report.grounding.recent_news
                 else "No recent news"
             )
-            past_work = ", ".join(cand.past_positions) if cand.past_positions else "No prior positions"
+            past_work = (
+                ", ".join(cand.past_positions)
+                if cand.past_positions
+                else "No prior positions"
+            )
             delivery = self._assess_delivery_probability(cand, report.grounding)
 
             matrix[cand.id] = {
@@ -238,7 +256,9 @@ class CandidateService:
         ai_analysis = await self._generate_comparison_analysis(reports)
         citations = [
             SourceCitation(source="MyNeta.info", url="https://myneta.info"),
-            SourceCitation(source="Election Commission of India", url="https://eci.gov.in"),
+            SourceCitation(
+                source="Election Commission of India", url="https://eci.gov.in"
+            ),
         ]
 
         return ComparisonResult(
@@ -261,11 +281,13 @@ class CandidateService:
         if not self._maps_api_key:
             return "New Delhi"
 
-        params = urllib.parse.urlencode({
-            "latlng": f"{lat},{lng}",
-            "key": self._maps_api_key,
-            "result_type": "administrative_area_level_2",
-        })
+        params = urllib.parse.urlencode(
+            {
+                "latlng": f"{lat},{lng}",
+                "key": self._maps_api_key,
+                "result_type": "administrative_area_level_2",
+            }
+        )
         data = await self._fetch_json(f"{GEOCODING_URL}?{params}")
         if not data:
             return "New Delhi"
@@ -274,20 +296,25 @@ class CandidateService:
         if results:
             for component in results[0].get("address_components", []):
                 types = component.get("types", [])
-                if "sublocality_level_1" in types or "administrative_area_level_2" in types:
-                    return component.get("long_name", "New Delhi")
+                if (
+                    "sublocality_level_1" in types
+                    or "administrative_area_level_2" in types
+                ):
+                    return str(component.get("long_name", "New Delhi"))
         return "New Delhi"
 
     async def _call_gemini(self, prompt: str) -> str:
         model = "gemini-2.0-flash"
         url = f"{GEMINI_API_URL}/{model}:generateContent?key={self._gemini_api_key}"
-        body = json.dumps({
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": 0.2,
-                "maxOutputTokens": 1024,
-            },
-        }).encode("utf-8")
+        body = json.dumps(
+            {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {
+                    "temperature": 0.2,
+                    "maxOutputTokens": 1024,
+                },
+            }
+        ).encode("utf-8")
 
         def _do_call() -> str:
             req = urllib.request.Request(
@@ -303,7 +330,7 @@ class CandidateService:
                 if candidates:
                     parts = candidates[0].get("content", {}).get("parts", [])
                     if parts:
-                        return parts[0].get("text", "")
+                        return str(parts[0].get("text", ""))
             except (OSError, TimeoutError, json.JSONDecodeError) as exc:
                 logger.warning("gemini_call_failed", error=str(exc))
             return ""
@@ -311,7 +338,9 @@ class CandidateService:
         return await asyncio.to_thread(_do_call)
 
     def _parse_grounding_response(
-        self, text: str, candidate_name: str,
+        self,
+        text: str,
+        candidate_name: str,
     ) -> GroundingResult:
         if not text:
             return self._demo_grounding(candidate_name)
@@ -346,7 +375,8 @@ class CandidateService:
         )
 
     async def _generate_comparison_analysis(
-        self, reports: list[BackgroundReport],
+        self,
+        reports: list[BackgroundReport],
     ) -> str:
         if not self._gemini_api_key:
             return self._demo_analysis(reports)
@@ -372,7 +402,8 @@ class CandidateService:
 
     @staticmethod
     def _assess_delivery_probability(
-        candidate: CandidateSummary, grounding: GroundingResult,
+        candidate: CandidateSummary,
+        grounding: GroundingResult,
     ) -> str:
         score = 0
         terms = len(candidate.past_positions)
@@ -415,7 +446,8 @@ class CandidateService:
 
     @staticmethod
     def _find_candidate(
-        candidate_id: str, candidates: list[CandidateSummary] | None,
+        candidate_id: str,
+        candidates: list[CandidateSummary] | None,
     ) -> CandidateSummary | None:
         if not candidates:
             return None

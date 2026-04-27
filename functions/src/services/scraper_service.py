@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 import asyncio
 import json
 import re
@@ -22,6 +23,7 @@ class _TableParser(HTMLParser):
     """Minimal HTML table parser for MyNeta candidate tables."""
 
     def __init__(self) -> None:
+        """Execute __init__ operation."""
         super().__init__()
         self.rows: list[list[str]] = []
         self._current_row: list[str] = []
@@ -31,6 +33,7 @@ class _TableParser(HTMLParser):
         self._table_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        """Execute handle_starttag operation."""
         if tag == "table":
             self._table_depth += 1
             if self._table_depth == 1:
@@ -40,6 +43,7 @@ class _TableParser(HTMLParser):
             self._current_cell = []
 
     def handle_endtag(self, tag: str) -> None:
+        """Execute handle_endtag operation."""
         if tag in ("td", "th") and self._in_td:
             self._in_td = False
             self._current_row.append(" ".join(self._current_cell).strip())
@@ -53,6 +57,7 @@ class _TableParser(HTMLParser):
                 self._in_table = False
 
     def handle_data(self, data: str) -> None:
+        """Execute handle_data operation."""
         if self._in_td:
             self._current_cell.append(data.strip())
 
@@ -61,7 +66,8 @@ class ScraperService:
     """Extracts structured candidate data from public sources."""
 
     async def fetch_myneta_candidates(
-        self, constituency: str,
+        self,
+        constituency: str,
     ) -> list[RawCandidateData]:
         """Fetch candidate list from MyNeta.info for a constituency.
 
@@ -76,14 +82,17 @@ class ScraperService:
         html = await self._fetch_page(f"{MYNETA_BASE_URL}/ls2024/{slug}")
         if not html:
             logger.warning(
-                "myneta_fetch_failed", constituency=constituency, slug=slug,
+                "myneta_fetch_failed",
+                constituency=constituency,
+                slug=slug,
             )
             return []
 
         return self._parse_candidate_table(html, constituency)
 
     async def fetch_eci_affidavit(
-        self, candidate_id: str,
+        self,
+        candidate_id: str,
     ) -> AffidavitData | None:
         """Fetch candidate's election affidavit from ECI.
 
@@ -93,7 +102,9 @@ class ScraperService:
         return None
 
     def _parse_candidate_table(
-        self, html: str, constituency: str,
+        self,
+        html: str,
+        constituency: str,
     ) -> list[RawCandidateData]:
         parser = _TableParser()
         try:
@@ -173,7 +184,7 @@ class ScraperService:
                     headers={"User-Agent": "CivikSutra/1.0 (election-education)"},
                 )
                 with urllib.request.urlopen(req, timeout=FETCH_TIMEOUT_SECONDS) as resp:
-                    return resp.read().decode("utf-8", errors="replace")
+                    return str(resp.read().decode("utf-8", errors="replace"))
             except (OSError, TimeoutError):
                 return None
 

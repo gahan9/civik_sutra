@@ -6,7 +6,6 @@ import type {
   NearbyResponse,
 } from "../types/booth";
 
-
 async function postJson<TRequest, TResponse>(
   path: string,
   payload: TRequest,

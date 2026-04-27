@@ -6,6 +6,25 @@
 
 A mobile-first web application that meets voters where they are -- physically and informationally. Uses GPS to find nearby booths, Gemini AI for candidate research with Google Search grounding, and structured comparisons to turn election data into actionable voter education.
 
+## Hackathon Journey: Idea, Planning, and AI Implementation
+
+### The Initial Idea
+**CivikSutra (The Civic Formula)** was conceived to solve a critical problem: bridging the information gap for Indian voters. The idea is to create a mobile-first, AI-powered election process education assistant that meets voters where they are. From finding the exact polling booth using GPS to researching candidates via Gemini AI with Google Search grounding, the app turns complex election data into actionable, easy-to-understand voter education.
+
+### Planning the Approach
+Taking an "Architect First, AI Executes" approach, we planned a highly scalable and productizable architecture before writing any code:
+1. **Architecture Design:** A serverless monolith (Firebase Hosting for React PWA, Cloud Functions for Python backend, Firestore for caching).
+2. **Delivery Phases:** Broken down into Foundation (Booth Finder), Intelligence (Candidate Research), Depth (Manifesto & Chat), and Polish (Multilingual).
+3. **Security & Scale:** Ensured zero plaintext secrets, strict CORS, and Firebase Auth for secure, frictionless access.
+
+### Module-Wise Implementation using AI
+We leveraged AI extensively through intent-driven prompting and iterative refinement to build our modules:
+- **Project Scaffolding:** Used AI to generate the initial folder structure, Dockerfiles, and deployment configurations.
+- **Booth Finder Module:** Prompted AI to integrate the Google Maps JavaScript API with React, handling GPS coordinates and traffic-aware routing.
+- **Candidate Intelligence:** Utilized Gemini 2.0 Flash for structured data extraction and comparison, summarizing candidate affidavits and party manifestos.
+- **Assistant Chat:** Built a conversational election guide where AI helped implement the streaming responses and grounding with real-time Google Search results.
+- **Multilingual Support:** Guided AI to build a seamless translation layer, making the app accessible in Hindi, English, and regional languages.
+
 ## Features
 
 | Module | Description | Status |

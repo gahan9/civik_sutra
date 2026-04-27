@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { getCandidateBackground } from "../../lib/candidate-api";
 import type { BackgroundReport, CandidateSummary } from "../../types/candidate";
 
-
 interface CandidateProfileProps {
   candidate: CandidateSummary;
   onBack: () => void;
@@ -11,7 +10,8 @@ interface CandidateProfileProps {
 
 function formatInr(amount: number): string {
   if (amount === 0) return "Not declared";
-  if (amount >= 10_000_000) return `\u20b9${(amount / 10_000_000).toFixed(1)} Crore`;
+  if (amount >= 10_000_000)
+    return `\u20b9${(amount / 10_000_000).toFixed(1)} Crore`;
   if (amount >= 100_000) return `\u20b9${(amount / 100_000).toFixed(1)} Lakh`;
   return `\u20b9${amount.toLocaleString("en-IN")}`;
 }
@@ -44,7 +44,9 @@ export function CandidateProfile({ candidate, onBack }: CandidateProfileProps) {
     }
 
     void load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [candidate.id]);
 
   return (
@@ -124,7 +126,9 @@ export function CandidateProfile({ candidate, onBack }: CandidateProfileProps) {
               <ul className="news-list">
                 {report.grounding.recent_news.map((item) => (
                   <li key={item.title} className="news-item">
-                    <span className={`sentiment-dot ${sentimentClass[item.sentiment]}`} />
+                    <span
+                      className={`sentiment-dot ${sentimentClass[item.sentiment]}`}
+                    />
                     <div>
                       <p className="news-title">
                         {item.url ? (

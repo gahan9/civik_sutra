@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 
 import { BoothFinder } from "./BoothFinder";
 
-
 describe("BoothFinder", () => {
   it("renders GPS and manual search entry points", () => {
     render(<BoothFinder />);
@@ -16,6 +15,8 @@ describe("BoothFinder", () => {
     ).toBeInTheDocument();
     expect(screen.getByLabelText(/pincode or address/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/epic number/i)).toBeInTheDocument();
-    expect(screen.getByText(/official verification required/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/official verification required/i),
+    ).toBeInTheDocument();
   });
 });

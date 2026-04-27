@@ -2,7 +2,6 @@ import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
 import type { BoothResult, LatLng } from "../../types/booth";
 
-
 interface BoothMapProps {
   userLocation: LatLng | null;
   booths: BoothResult[];
@@ -65,10 +64,7 @@ export function BoothMap({
       zoom={14}
     >
       {userLocation ? (
-        <MarkerF
-          position={userLocation}
-          title="Your location"
-        />
+        <MarkerF position={userLocation} title="Your location" />
       ) : null}
       {booths.map((booth) => (
         <MarkerF

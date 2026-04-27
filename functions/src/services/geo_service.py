@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 import asyncio
 import json
 import os
@@ -22,7 +23,6 @@ from src.models.booth import (
     VisitTimeSuggestion,
 )
 
-
 PLACES_TEXT_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/json"
 MAX_LIVE_BOOTHS = 3
@@ -37,6 +37,7 @@ class GeoService:
     """Location service for polling booth discovery and route guidance."""
 
     def __init__(self, maps_api_key: str | None = None) -> None:
+        """Execute __init__ operation."""
         self._maps_api_key = maps_api_key or os.getenv("EP_GOOGLE_MAPS_API_KEY")
 
     async def find_nearby_booths(
@@ -45,6 +46,7 @@ class GeoService:
         lng: float,
         radius_km: float = 5.0,
     ) -> NearbyResponse:
+        """Execute find_nearby_booths operation."""
         request = NearbyRequest(lat=lat, lng=lng, radius_km=radius_km)
         origin = LatLng(lat=request.lat, lng=request.lng)
 
@@ -77,6 +79,7 @@ class GeoService:
         )
 
     async def get_directions(self, request: DirectionsRequest) -> DirectionsResult:
+        """Execute get_directions operation."""
         if self._maps_api_key:
             live_directions = await self._get_live_directions(request)
             if live_directions:
@@ -118,7 +121,10 @@ class GeoService:
             traffic_level=traffic_level,
         )
 
-    async def verify_booth_assignment(self, epic_number: str) -> BoothVerificationResult:
+    async def verify_booth_assignment(
+        self, epic_number: str
+    ) -> BoothVerificationResult:
+        """Execute verify_booth_assignment operation."""
         encoded_epic = epic_number.strip().upper()
         return BoothVerificationResult(
             verified=False,
@@ -134,6 +140,7 @@ class GeoService:
         )
 
     def suggest_best_visit_time(self, booth_id: str) -> VisitTimeSuggestion:
+        """Execute suggest_best_visit_time operation."""
         return VisitTimeSuggestion(
             window="10:00-11:30",
             reason=(
@@ -147,6 +154,7 @@ class GeoService:
         normal_minutes: int,
         traffic_minutes: int,
     ) -> TrafficLevel:
+        """Execute classify_traffic_level operation."""
         ratio = traffic_minutes / max(normal_minutes, 1)
         if ratio < 1.2:
             return "low"
@@ -286,6 +294,7 @@ class GeoService:
         target_url = f"{url}?{query}"
 
         def read_url() -> dict[str, Any]:
+            """Execute read_url operation."""
             request = urllib.request.Request(target_url)
             with urllib.request.urlopen(request, timeout=8) as response:
                 body = response.read().decode("utf-8")

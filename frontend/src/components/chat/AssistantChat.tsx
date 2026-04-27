@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { getQuickQuestions, sendChatMessage } from "../../lib/chat-api";
-import type { ChatMessage, SourceCitation, ToolCallRecord } from "../../types/chat";
-
+import type {
+  ChatMessage,
+  SourceCitation,
+  ToolCallRecord,
+} from "../../types/chat";
 
 function generateSessionId(): string {
   return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
 export function AssistantChat() {
+  const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,8 +22,10 @@ export function AssistantChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    getQuickQuestions("en").then(setQuickQuestions).catch(() => {});
-  }, []);
+    getQuickQuestions(i18n.language)
+      .then(setQuickQuestions)
+      .catch(() => {});
+  }, [i18n.language]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,7 +45,7 @@ export function AssistantChat() {
         const response = await sendChatMessage({
           message: trimmed,
           session_id: sessionId,
-          language: "en",
+          language: i18n.language,
         });
 
         const assistantMessage: ChatMessage = {
@@ -53,16 +60,14 @@ export function AssistantChat() {
           ...prev,
           {
             role: "assistant",
-            content:
-              "I'm sorry, I couldn't process your question right now. " +
-              "Please try again or visit eci.gov.in for official information.",
+            content: t("chat.errorResponse"),
           },
         ]);
       } finally {
         setLoading(false);
       }
     },
-    [loading, sessionId],
+    [loading, sessionId, i18n.language, t],
   );
 
   const handleKeyDown = useCallback(
@@ -78,18 +83,15 @@ export function AssistantChat() {
   return (
     <div className="shell">
       <section className="hero">
-        <p className="eyebrow">Election Assistant</p>
-        <h1>Ask CivikSutra</h1>
-        <p>
-          Your AI-powered guide to the Indian election process. Ask about
-          voting procedures, documents, candidates, and more.
-        </p>
+        <p className="eyebrow">{t("nav.chat")}</p>
+        <h1>{t("chat.title")}</h1>
+        <p>{t("chat.subtitle")}</p>
       </section>
 
       <section className="chat-container">
         {messages.length === 0 && quickQuestions.length > 0 && (
           <div className="quick-questions">
-            <p className="quick-questions-label">Quick Questions:</p>
+            <p className="quick-questions-label">{t("chat.quickQuestions")}</p>
             <div className="quick-questions-grid">
               {quickQuestions.slice(0, 6).map((q, idx) => (
                 <button
@@ -111,7 +113,9 @@ export function AssistantChat() {
             <div
               key={idx}
               className={
-                msg.role === "user" ? "chat-msg chat-msg--user" : "chat-msg chat-msg--assistant"
+                msg.role === "user"
+                  ? "chat-msg chat-msg--user"
+                  : "chat-msg chat-msg--assistant"
               }
             >
               <div className="chat-msg-role">
@@ -135,7 +139,7 @@ export function AssistantChat() {
             <div className="chat-msg chat-msg--assistant">
               <div className="chat-msg-role">CivikSutra</div>
               <div className="chat-msg-content chat-typing">
-                Thinking...
+                {t("chat.thinking")}
               </div>
             </div>
           )}
@@ -149,7 +153,7 @@ export function AssistantChat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type your question..."
+            placeholder={t("chat.placeholder")}
             disabled={loading}
             aria-label="Chat message input"
           />
@@ -158,14 +162,13 @@ export function AssistantChat() {
             onClick={() => handleSend(input)}
             disabled={!input.trim() || loading}
           >
-            Send
+            {t("chat.send")}
           </button>
         </div>
       </section>
     </div>
   );
 }
-
 
 function CitationList({ citations }: { citations: SourceCitation[] }) {
   return (
@@ -184,7 +187,6 @@ function CitationList({ citations }: { citations: SourceCitation[] }) {
     </div>
   );
 }
-
 
 function ToolCallList({ toolCalls }: { toolCalls: ToolCallRecord[] }) {
   return (

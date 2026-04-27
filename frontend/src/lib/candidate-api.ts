@@ -6,7 +6,6 @@ import type {
   ComparisonResult,
 } from "../types/candidate";
 
-
 async function postJson<TRequest, TResponse>(
   path: string,
   payload: TRequest,

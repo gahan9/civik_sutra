@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 from fastapi import APIRouter, Depends
 
 from src.models.manifesto import ManifestoCompareRequest, ManifestoComparison
@@ -9,6 +10,7 @@ router = APIRouter(prefix="/manifesto", tags=["manifesto"])
 
 
 def get_manifesto_service() -> ManifestoService:
+    """Execute get_manifesto_service operation."""
     return ManifestoService()
 
 
@@ -17,6 +19,7 @@ async def compare_manifestos(
     request: ManifestoCompareRequest,
     service: ManifestoService = Depends(get_manifesto_service),
 ) -> ManifestoComparison:
+    """Execute compare_manifestos operation."""
     return await service.compare_manifestos(
         party_names=request.party_names,
         categories=request.categories,

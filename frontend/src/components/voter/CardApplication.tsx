@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 
 import { APPLICATION_STEPS, NVSP_URLS } from "../../data/voter-readiness";
 
-
 export function CardApplication() {
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -42,7 +41,9 @@ export function CardApplication() {
 
       <div className="step-card">
         <div className="step-card-header">
-          <span className="step-number">Step {step.step} of {APPLICATION_STEPS.length}</span>
+          <span className="step-number">
+            Step {step.step} of {APPLICATION_STEPS.length}
+          </span>
           <h3>{step.title}</h3>
         </div>
 

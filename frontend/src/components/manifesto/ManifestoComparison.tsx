@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { compareManifestos } from "../../lib/manifesto-api";
 import type {
   ManifestoComparison as ManifestoComparisonData,
   PromiseTracker,
 } from "../../types/manifesto";
-
 
 const AVAILABLE_PARTIES = ["BJP", "INC", "AAP", "BSP", "TMC", "DMK"];
 
@@ -28,8 +28,14 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 };
 
 export function ManifestoComparison() {
-  const [selectedParties, setSelectedParties] = useState<string[]>(["BJP", "INC"]);
-  const [comparison, setComparison] = useState<ManifestoComparisonData | null>(null);
+  const { t } = useTranslation();
+  const [selectedParties, setSelectedParties] = useState<string[]>([
+    "BJP",
+    "INC",
+  ]);
+  const [comparison, setComparison] = useState<ManifestoComparisonData | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,16 +82,13 @@ export function ManifestoComparison() {
   return (
     <div className="shell">
       <section className="hero">
-        <p className="eyebrow">Manifesto Comparison</p>
-        <h1>Compare Party Manifestos</h1>
-        <p>
-          Side-by-side analysis of party promises across key policy areas.
-          Select 2-4 parties to compare their election commitments.
-        </p>
+        <p className="eyebrow">{t("nav.manifesto")}</p>
+        <h1>{t("manifesto.title")}</h1>
+        <p>{t("manifesto.subtitle")}</p>
       </section>
 
       <section className="manifesto-selector">
-        <label>Select parties to compare (2-4):</label>
+        <label>{t("manifesto.selectParties")}</label>
         <div className="party-chips">
           {AVAILABLE_PARTIES.map((party) => (
             <button
@@ -108,7 +111,7 @@ export function ManifestoComparison() {
           onClick={handleCompare}
           disabled={selectedParties.length < 2 || loading}
         >
-          {loading ? "Comparing..." : "Compare Manifestos"}
+          {loading ? t("manifesto.comparing") : t("manifesto.compareBtn")}
         </button>
       </section>
 
@@ -138,37 +141,39 @@ export function ManifestoComparison() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(comparison.categories).map(([cat, partyData]) => (
-                    <tr key={cat}>
-                      <td className="compare-dim-label">
-                        {CATEGORY_LABELS[cat] ?? cat}
-                      </td>
-                      {comparison.parties.map((party) => (
-                        <td key={party}>
-                          <ul className="manifesto-promises">
-                            {(partyData[party] ?? ["Not addressed"]).map(
-                              (promise, idx) => (
-                                <li key={idx}>{promise}</li>
-                              ),
-                            )}
-                          </ul>
+                  {Object.entries(comparison.categories).map(
+                    ([cat, partyData]) => (
+                      <tr key={cat}>
+                        <td className="compare-dim-label">
+                          {CATEGORY_LABELS[cat] ?? cat}
                         </td>
-                      ))}
-                    </tr>
-                  ))}
+                        {comparison.parties.map((party) => (
+                          <td key={party}>
+                            <ul className="manifesto-promises">
+                              {(partyData[party] ?? ["Not addressed"]).map(
+                                (promise, idx) => (
+                                  <li key={idx}>{promise}</li>
+                                ),
+                              )}
+                            </ul>
+                          </td>
+                        ))}
+                      </tr>
+                    ),
+                  )}
                 </tbody>
               </table>
             </div>
 
             <div className="compare-analysis">
-              <h3>AI Analysis</h3>
+              <h3>{t("manifesto.aiAnalysis")}</h3>
               <p>{comparison.ai_analysis}</p>
             </div>
           </section>
 
           {comparison.past_promises && (
             <section className="compare-panel" style={{ marginTop: "1rem" }}>
-              <h2>Past Promise Delivery</h2>
+              <h2>{t("manifesto.pastPromises")}</h2>
               {Object.entries(comparison.past_promises).map(
                 ([party, promises]) => (
                   <div key={party} className="promise-section">
@@ -182,13 +187,13 @@ export function ManifestoComparison() {
 
           <div className="card-actions" style={{ marginTop: "1rem" }}>
             <button type="button" className="secondary" onClick={handleShare}>
-              Share Comparison
+              {t("manifesto.share")}
             </button>
           </div>
 
           {comparison.sources.length > 0 && (
             <div className="source-note" style={{ marginTop: "1rem" }}>
-              <strong>Sources: </strong>
+              <strong>{t("manifesto.sources")}: </strong>
               {comparison.sources.map((s, i) => (
                 <span key={i}>
                   {s.manifesto_url ? (
@@ -212,7 +217,6 @@ export function ManifestoComparison() {
     </div>
   );
 }
-
 
 function PromiseTable({ promises }: { promises: PromiseTracker[] }) {
   if (promises.length === 0) {

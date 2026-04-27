@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { compareCandidates } from "../../lib/candidate-api";
 import type { CandidateSummary, ComparisonResult } from "../../types/candidate";
 
-
 interface CandidateCompareProps {
   candidates: CandidateSummary[];
   onBack: () => void;
@@ -21,7 +20,10 @@ const dimensionLabels: Record<string, string> = {
   delivery_probability: "Delivery Probability",
 };
 
-export function CandidateCompare({ candidates, onBack }: CandidateCompareProps) {
+export function CandidateCompare({
+  candidates,
+  onBack,
+}: CandidateCompareProps) {
   const [result, setResult] = useState<ComparisonResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +47,9 @@ export function CandidateCompare({ candidates, onBack }: CandidateCompareProps) 
     }
 
     void load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [candidates]);
 
   return (

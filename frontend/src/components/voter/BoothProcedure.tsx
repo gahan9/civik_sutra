@@ -2,43 +2,50 @@ const PROCEDURE_STEPS = [
   {
     step: 1,
     title: "Arrive & Queue",
-    description: "Arrive at your assigned polling booth during polling hours (usually 7 AM - 6 PM). Join the queue for your booth number.",
+    description:
+      "Arrive at your assigned polling booth during polling hours (usually 7 AM - 6 PM). Join the queue for your booth number.",
     icon: "🏫",
   },
   {
     step: 2,
     title: "Identity Verification",
-    description: "Show your valid photo ID to the presiding officer. They will verify your name against the electoral roll.",
+    description:
+      "Show your valid photo ID to the presiding officer. They will verify your name against the electoral roll.",
     icon: "🪪",
   },
   {
     step: 3,
     title: "Ink Mark & Ballot Slip",
-    description: "Your left index finger will be marked with indelible ink. You'll receive a ballot slip with your serial number.",
+    description:
+      "Your left index finger will be marked with indelible ink. You'll receive a ballot slip with your serial number.",
     icon: "✋",
   },
   {
     step: 4,
     title: "Enter Voting Compartment",
-    description: "Enter the voting compartment ALONE. No phones, cameras, or companions allowed inside (PWD voters excepted).",
+    description:
+      "Enter the voting compartment ALONE. No phones, cameras, or companions allowed inside (PWD voters excepted).",
     icon: "🚪",
   },
   {
     step: 5,
     title: "Cast Your Vote on EVM",
-    description: "The Electronic Voting Machine (EVM) has a list of candidates with party symbols. Press the blue button next to your chosen candidate.",
+    description:
+      "The Electronic Voting Machine (EVM) has a list of candidates with party symbols. Press the blue button next to your chosen candidate.",
     icon: "🗳️",
   },
   {
     step: 6,
     title: "Verify on VVPAT",
-    description: "After pressing the button, you'll hear a BEEP. The VVPAT machine will display a printed slip showing the candidate name and symbol for 7 seconds. Verify it matches your choice.",
+    description:
+      "After pressing the button, you'll hear a BEEP. The VVPAT machine will display a printed slip showing the candidate name and symbol for 7 seconds. Verify it matches your choice.",
     icon: "✅",
   },
   {
     step: 7,
     title: "Exit",
-    description: "Once verified, exit the voting compartment. Your vote has been cast. Do NOT discuss your vote with anyone inside the booth premises.",
+    description:
+      "Once verified, exit the voting compartment. Your vote has been cast. Do NOT discuss your vote with anyone inside the booth premises.",
     icon: "🚶",
   },
 ];
@@ -69,10 +76,10 @@ export function BoothProcedure() {
       <div className="voter-info-box">
         <h3>What is NOTA?</h3>
         <p>
-          NOTA (None Of The Above) is the last option on the EVM. If you
-          feel no candidate deserves your vote, you can press NOTA. While
-          NOTA votes are counted, even if NOTA gets the most votes, the
-          candidate with the highest regular votes wins.
+          NOTA (None Of The Above) is the last option on the EVM. If you feel no
+          candidate deserves your vote, you can press NOTA. While NOTA votes are
+          counted, even if NOTA gets the most votes, the candidate with the
+          highest regular votes wins.
         </p>
       </div>
 
@@ -84,10 +91,10 @@ export function BoothProcedure() {
           network, and stores votes in a tamper-proof chip.
         </p>
         <p>
-          <strong>VVPAT (Voter Verifiable Paper Audit Trail)</strong> prints
-          a paper slip after each vote, allowing you to verify that your
-          vote was recorded correctly. The slip drops into a sealed box for
-          potential audit.
+          <strong>VVPAT (Voter Verifiable Paper Audit Trail)</strong> prints a
+          paper slip after each vote, allowing you to verify that your vote was
+          recorded correctly. The slip drops into a sealed box for potential
+          audit.
         </p>
       </div>
     </div>

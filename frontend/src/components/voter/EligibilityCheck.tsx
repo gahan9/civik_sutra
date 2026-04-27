@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 
 import { INDIAN_STATES, NVSP_URLS } from "../../data/voter-readiness";
 
-
 type CitizenType = "citizen" | "nri" | "non_citizen" | "";
 type RegisteredType = "yes" | "no" | "not_sure" | "";
 
@@ -20,29 +19,39 @@ function checkEligibility(
   if (!citizen) return null;
 
   if (age < 18) {
-    return { eligible: false, reason: "Must be 18 years or older on the qualifying date (January 1 of the election year)." };
+    return {
+      eligible: false,
+      reason:
+        "Must be 18 years or older on the qualifying date (January 1 of the election year).",
+    };
   }
   if (citizen === "non_citizen") {
-    return { eligible: false, reason: "Must be an Indian citizen to vote in Indian elections." };
+    return {
+      eligible: false,
+      reason: "Must be an Indian citizen to vote in Indian elections.",
+    };
   }
   if (citizen === "nri") {
     return {
       eligible: true,
-      reason: "NRIs can vote! Register as an overseas voter via Form 6A on the NVSP portal.",
+      reason:
+        "NRIs can vote! Register as an overseas voter via Form 6A on the NVSP portal.",
       action: "nri",
     };
   }
   if (registered === "no") {
     return {
       eligible: true,
-      reason: "You are eligible but need to register first. Apply at least 15 days before election date.",
+      reason:
+        "You are eligible but need to register first. Apply at least 15 days before election date.",
       action: "register",
     };
   }
   if (registered === "not_sure") {
     return {
       eligible: true,
-      reason: "Verify your registration on the NVSP portal or ECI Electoral Search.",
+      reason:
+        "Verify your registration on the NVSP portal or ECI Electoral Search.",
       action: "check",
     };
   }
@@ -89,39 +98,45 @@ export function EligibilityCheck() {
         </div>
 
         <div className="voter-field">
-          <label>Are you an Indian citizen?</label>
-          <div className="voter-radio-group">
-            {(["citizen", "nri", "non_citizen"] as CitizenType[]).map((val) => (
-              <label key={val} className="voter-radio">
-                <input
-                  type="radio"
-                  name="citizen"
-                  value={val}
-                  checked={citizen === val}
-                  onChange={() => setCitizen(val)}
-                />
-                {val === "citizen" ? "Yes" : val === "nri" ? "NRI" : "No"}
-              </label>
-            ))}
-          </div>
+          <fieldset>
+            <legend>Are you an Indian citizen?</legend>
+            <div className="voter-radio-group">
+              {(["citizen", "nri", "non_citizen"] as CitizenType[]).map((val) => (
+                <label key={val} className="voter-radio">
+                  <input
+                    type="radio"
+                    name="citizen"
+                    value={val}
+                    checked={citizen === val}
+                    onChange={() => setCitizen(val)}
+                  />
+                  {val === "citizen" ? "Yes" : val === "nri" ? "NRI" : "No"}
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
         <div className="voter-field">
-          <label>Are you registered as a voter?</label>
-          <div className="voter-radio-group">
-            {(["yes", "no", "not_sure"] as RegisteredType[]).map((val) => (
-              <label key={val} className="voter-radio">
-                <input
-                  type="radio"
-                  name="registered"
-                  value={val}
-                  checked={registered === val}
-                  onChange={() => setRegistered(val)}
-                />
-                {val === "not_sure" ? "Not sure" : val.charAt(0).toUpperCase() + val.slice(1)}
-              </label>
-            ))}
-          </div>
+          <fieldset>
+            <legend>Are you registered as a voter?</legend>
+            <div className="voter-radio-group">
+              {(["yes", "no", "not_sure"] as RegisteredType[]).map((val) => (
+                <label key={val} className="voter-radio">
+                  <input
+                    type="radio"
+                    name="registered"
+                    value={val}
+                    checked={registered === val}
+                    onChange={() => setRegistered(val)}
+                  />
+                  {val === "not_sure"
+                    ? "Not sure"
+                    : val.charAt(0).toUpperCase() + val.slice(1)}
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
         <div className="voter-field">
@@ -133,7 +148,9 @@ export function EligibilityCheck() {
           >
             <option value="">Select state</option>
             {INDIAN_STATES.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>
+                {s}
+              </option>
             ))}
           </select>
         </div>
@@ -144,8 +161,18 @@ export function EligibilityCheck() {
       </div>
 
       {result && (
-        <div className={result.eligible ? "voter-result voter-result--eligible" : "voter-result voter-result--ineligible"}>
-          <h3>{result.eligible ? "You ARE eligible to vote!" : "You are not eligible to vote"}</h3>
+        <div
+          className={
+            result.eligible
+              ? "voter-result voter-result--eligible"
+              : "voter-result voter-result--ineligible"
+          }
+        >
+          <h3>
+            {result.eligible
+              ? "You ARE eligible to vote!"
+              : "You are not eligible to vote"}
+          </h3>
           <p>{result.reason}</p>
 
           {result.action === "register" && (

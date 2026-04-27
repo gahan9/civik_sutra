@@ -3,7 +3,6 @@ import type {
   ManifestoComparison,
 } from "../types/manifesto";
 
-
 export async function compareManifestos(
   request: ManifestoCompareRequest,
 ): Promise<ManifestoComparison> {
@@ -14,7 +13,9 @@ export async function compareManifestos(
   });
 
   if (!response.ok) {
-    throw new Error(`Manifesto comparison failed with status ${response.status}`);
+    throw new Error(
+      `Manifesto comparison failed with status ${response.status}`,
+    );
   }
 
   return response.json() as Promise<ManifestoComparison>;

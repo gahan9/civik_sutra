@@ -1,6 +1,5 @@
 import type { CandidateSummary } from "../../types/candidate";
 
-
 interface CandidateCardProps {
   candidate: CandidateSummary;
   selected: boolean;
@@ -10,7 +9,8 @@ interface CandidateCardProps {
 
 function formatInr(amount: number): string {
   if (amount === 0) return "Not declared";
-  if (amount >= 10_000_000) return `\u20b9${(amount / 10_000_000).toFixed(1)} Cr`;
+  if (amount >= 10_000_000)
+    return `\u20b9${(amount / 10_000_000).toFixed(1)} Cr`;
   if (amount >= 100_000) return `\u20b9${(amount / 100_000).toFixed(1)} L`;
   return `\u20b9${amount.toLocaleString("en-IN")}`;
 }
@@ -22,7 +22,9 @@ export function CandidateCard({
   onProfile,
 }: CandidateCardProps) {
   return (
-    <article className={`candidate-card${selected ? " candidate-card--selected" : ""}`}>
+    <article
+      className={`candidate-card${selected ? " candidate-card--selected" : ""}`}
+    >
       <div className="candidate-card__header">
         <label className="candidate-card__select">
           <input
@@ -40,11 +42,15 @@ export function CandidateCard({
 
       <div className="candidate-card__stats">
         <div className="candidate-stat">
-          <span className="candidate-stat__icon" aria-hidden="true">&#127891;</span>
+          <span className="candidate-stat__icon" aria-hidden="true">
+            &#127891;
+          </span>
           <span>{candidate.education}</span>
         </div>
         <div className="candidate-stat">
-          <span className="candidate-stat__icon" aria-hidden="true">&#9878;&#65039;</span>
+          <span className="candidate-stat__icon" aria-hidden="true">
+            &#9878;&#65039;
+          </span>
           <span>
             {candidate.criminal_cases === 0
               ? "No criminal cases"
@@ -52,12 +58,16 @@ export function CandidateCard({
           </span>
         </div>
         <div className="candidate-stat">
-          <span className="candidate-stat__icon" aria-hidden="true">&#128176;</span>
+          <span className="candidate-stat__icon" aria-hidden="true">
+            &#128176;
+          </span>
           <span>{formatInr(candidate.total_assets_inr)}</span>
         </div>
         {candidate.past_positions.length > 0 ? (
           <div className="candidate-stat">
-            <span className="candidate-stat__icon" aria-hidden="true">&#127963;&#65039;</span>
+            <span className="candidate-stat__icon" aria-hidden="true">
+              &#127963;&#65039;
+            </span>
             <span>{candidate.past_positions[0]}</span>
           </div>
         ) : null}

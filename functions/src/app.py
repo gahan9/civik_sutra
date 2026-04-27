@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.api.assistant import router as assistant_router
 from src.api.booth import router as booth_router
 from src.api.candidate import router as candidate_router
 from src.api.manifesto import router as manifesto_router
-
 
 app = FastAPI(
     title="CivikSutra API",
@@ -27,6 +28,7 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization"],
 )
 
+app.include_router(assistant_router)
 app.include_router(booth_router)
 app.include_router(candidate_router)
 app.include_router(manifesto_router)
@@ -34,4 +36,5 @@ app.include_router(manifesto_router)
 
 @app.get("/health")
 async def health() -> dict[str, str]:
+    """Execute health operation."""
     return {"status": "ok"}

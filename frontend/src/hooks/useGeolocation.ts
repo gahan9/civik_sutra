@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 
 import type { LatLng } from "../types/booth";
 
-
 interface GeolocationState {
   location: LatLng | null;
   loading: boolean;

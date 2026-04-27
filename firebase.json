@@ -18,6 +18,13 @@
         }
       },
       {
+        "source": "/assistant/**",
+        "function": {
+          "functionId": "api",
+          "region": "asia-south1"
+        }
+      },
+      {
         "source": "/manifesto/**",
         "function": {
           "functionId": "api",

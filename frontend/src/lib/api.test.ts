@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from "vitest";
 
 import { findNearbyBooths } from "./api";
 
-
 describe("findNearbyBooths", () => {
   it("posts GPS coordinates to the booth endpoint", async () => {
     const fetchMock = vi.fn().mockResolvedValue({

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+
 from typing import Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class StrictModel(BaseModel):
+    """Model or service class for StrictModel."""
+
     model_config = ConfigDict(extra="forbid")
 
 
@@ -21,18 +24,21 @@ class CandidateSearchRequest(StrictModel):
 
     @model_validator(mode="after")
     def require_one_search_method(self) -> Self:
+        """Execute require_one_search_method operation."""
         if not self.constituency and (self.lat is None or self.lng is None):
-            raise ValueError(
-                "Provide constituency name or both lat/lng coordinates"
-            )
+            raise ValueError("Provide constituency name or both lat/lng coordinates")
         return self
 
 
 class CompareRequest(StrictModel):
+    """Model or service class for CompareRequest."""
+
     candidate_ids: list[str] = Field(min_length=2, max_length=4)
 
 
 class CandidateSummary(StrictModel):
+    """Model or service class for CandidateSummary."""
+
     id: str
     name: str
     party: str
@@ -46,6 +52,8 @@ class CandidateSummary(StrictModel):
 
 
 class NewsItem(StrictModel):
+    """Model or service class for NewsItem."""
+
     title: str
     source: str
     date: str
@@ -54,12 +62,16 @@ class NewsItem(StrictModel):
 
 
 class SourceCitation(StrictModel):
+    """Model or service class for SourceCitation."""
+
     source: str
     url: str | None = None
     query: str | None = None
 
 
 class GroundingResult(StrictModel):
+    """Model or service class for GroundingResult."""
+
     recent_news: list[NewsItem] = Field(default_factory=list)
     achievements: list[str] = Field(default_factory=list)
     controversies: list[str] = Field(default_factory=list)
@@ -68,6 +80,8 @@ class GroundingResult(StrictModel):
 
 
 class CriminalCase(StrictModel):
+    """Model or service class for CriminalCase."""
+
     case_id: str | None = None
     description: str
     status: Literal["pending", "convicted", "acquitted"] = "pending"
@@ -76,12 +90,16 @@ class CriminalCase(StrictModel):
 
 
 class AssetBreakdown(StrictModel):
+    """Model or service class for AssetBreakdown."""
+
     movable: int = 0
     immovable: int = 0
     vehicles: list[str] = Field(default_factory=list)
 
 
 class BackgroundReport(StrictModel):
+    """Model or service class for BackgroundReport."""
+
     candidate: CandidateSummary
     grounding: GroundingResult
     criminal_details: list[CriminalCase] = Field(default_factory=list)
@@ -90,6 +108,8 @@ class BackgroundReport(StrictModel):
 
 
 class ComparisonResult(StrictModel):
+    """Model or service class for ComparisonResult."""
+
     dimensions: list[str]
     candidates: dict[str, dict[str, str]]
     ai_analysis: str
@@ -97,6 +117,8 @@ class ComparisonResult(StrictModel):
 
 
 class CandidateSearchResponse(StrictModel):
+    """Model or service class for CandidateSearchResponse."""
+
     constituency: str
     election: str = "General Election"
     candidates: list[CandidateSummary]
@@ -117,6 +139,8 @@ class RawCandidateData(StrictModel):
 
 
 class AffidavitData(StrictModel):
+    """Model or service class for AffidavitData."""
+
     candidate_name: str
     constituency: str
     criminal_cases: list[CriminalCase] = Field(default_factory=list)
