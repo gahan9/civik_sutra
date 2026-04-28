@@ -3,13 +3,20 @@ import { useTranslation } from "react-i18next";
 
 import { BoothProcedure } from "./BoothProcedure";
 import { CardApplication } from "./CardApplication";
+import { ElectionDateLinks } from "./ElectionDateLinks";
 import { EligibilityCheck } from "./EligibilityCheck";
 import { VotingChecklist } from "./VotingChecklist";
 
-type VoterTab = "eligibility" | "checklist" | "apply" | "procedure";
+export type VoterTab = "eligibility" | "checklist" | "apply" | "procedure";
 
-export function VoterReadiness() {
-  const [activeTab, setActiveTab] = useState<VoterTab>("eligibility");
+type VoterReadinessProps = {
+  initialTab?: VoterTab;
+};
+
+export function VoterReadiness({
+  initialTab = "eligibility",
+}: VoterReadinessProps = {}) {
+  const [activeTab, setActiveTab] = useState<VoterTab>(initialTab ?? "eligibility");
   const { t } = useTranslation();
 
   const tabs: { id: VoterTab; label: string }[] = [
@@ -26,6 +33,8 @@ export function VoterReadiness() {
         <h1>{t("voter.title")}</h1>
         <p>{t("voter.subtitle")}</p>
       </section>
+
+      <ElectionDateLinks />
 
       <div className="voter-tabs">
         {tabs.map((tab) => (

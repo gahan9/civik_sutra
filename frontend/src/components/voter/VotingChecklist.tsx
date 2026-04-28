@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import {
-  ACCEPTED_PHOTO_IDS,
-  CHECKLIST_ITEMS,
-} from "../../data/voter-readiness";
+import { ACCEPTED_PHOTO_IDS, CHECKLIST_ITEMS } from "../../data/voter-readiness";
 
 const STORAGE_KEY = "civiksutra-checklist";
 
@@ -37,7 +34,7 @@ export function VotingChecklist() {
 
   const handleShare = useCallback(() => {
     const lines = CHECKLIST_ITEMS.map(
-      (item) => `${checked[item.id] ? "✅" : "⬜"} ${item.label}`,
+      (item) => `${checked[item.id] ? "✅" : "⬜"} ${item.label}`
     );
     const text = `📋 My Voting Day Checklist (CivikSutra)\n\n${lines.join("\n")}`;
 
@@ -53,7 +50,7 @@ export function VotingChecklist() {
   const dontItems = CHECKLIST_ITEMS.filter((i) => i.category === "dont");
   const total = CHECKLIST_ITEMS.filter((i) => i.category !== "dont").length;
   const done = CHECKLIST_ITEMS.filter(
-    (i) => i.category !== "dont" && checked[i.id],
+    (i) => i.category !== "dont" && checked[i.id]
   ).length;
 
   return (
@@ -94,10 +91,7 @@ export function VotingChecklist() {
             </span>
           ))}
         </div>
-        <p
-          className="muted"
-          style={{ marginTop: "0.5rem", fontSize: "0.82rem" }}
-        >
+        <p className="muted" style={{ marginTop: "0.5rem", fontSize: "0.82rem" }}>
           ★ = Preferred. e-EPIC (digital) also accepted.
         </p>
       </div>

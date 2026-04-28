@@ -1,0 +1,36 @@
+# syntax=docker/dockerfile:1.6
+# CivikSutra backend image — FastAPI election coach on Cloud Run.
+# Runs the same code that powers Firebase Cloud Functions, but inside a
+# stateless container that Cloud Build can deploy automatically.
+
+FROM python:3.12-slim AS base
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY functions/pyproject.toml ./pyproject.toml
+COPY functions/src ./src
+
+RUN pip install --upgrade pip \
+    && pip install fastapi uvicorn[standard] pydantic pydantic-settings \
+        firebase-functions structlog google-cloud-translate
+
+RUN useradd --create-home --shell /usr/sbin/nologin civiksutra
+USER civiksutra
+
+ENV PORT=8080 \
+    EP_RATE_LIMIT_WINDOW_SECONDS=60 \
+    EP_RATE_LIMIT_MAX_REQUESTS=30
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl --fail --silent http://127.0.0.1:8080/health >/dev/null || exit 1
+
+CMD ["sh", "-c", "uvicorn src.app:app --host 0.0.0.0 --port ${PORT} --workers 2"]

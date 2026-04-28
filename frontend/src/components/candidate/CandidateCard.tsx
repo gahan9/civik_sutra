@@ -9,8 +9,7 @@ interface CandidateCardProps {
 
 function formatInr(amount: number): string {
   if (amount === 0) return "Not declared";
-  if (amount >= 10_000_000)
-    return `\u20b9${(amount / 10_000_000).toFixed(1)} Cr`;
+  if (amount >= 10_000_000) return `\u20b9${(amount / 10_000_000).toFixed(1)} Cr`;
   if (amount >= 100_000) return `\u20b9${(amount / 100_000).toFixed(1)} L`;
   return `\u20b9${amount.toLocaleString("en-IN")}`;
 }
@@ -22,9 +21,7 @@ export function CandidateCard({
   onProfile,
 }: CandidateCardProps) {
   return (
-    <article
-      className={`candidate-card${selected ? " candidate-card--selected" : ""}`}
-    >
+    <article className={`candidate-card${selected ? " candidate-card--selected" : ""}`}>
       <div className="candidate-card__header">
         <label className="candidate-card__select">
           <input
@@ -81,11 +78,7 @@ export function CandidateCard({
         <button type="button" onClick={() => onProfile(candidate)}>
           Full Profile
         </button>
-        <button
-          className="secondary"
-          type="button"
-          onClick={() => onSelect(candidate)}
-        >
+        <button className="secondary" type="button" onClick={() => onSelect(candidate)}>
           {selected ? "Deselect" : "Select"}
         </button>
       </div>

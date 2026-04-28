@@ -25,7 +25,7 @@ describe("findNearbyBooths", () => {
       expect.objectContaining({
         method: "POST",
         body: JSON.stringify({ lat: 28.6139, lng: 77.209, radius_km: 5 }),
-      }),
+      })
     );
   });
 });

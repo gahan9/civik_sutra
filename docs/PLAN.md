@@ -2,6 +2,10 @@
 
 Feature-wise phased delivery with unit test tracking for each module.
 
+## README alignment (important)
+
+The [README](../README.md) describes **shipped, user-facing modules** (Booth Finder, candidates, manifesto, voter guide, chat, i18n, etc.). The checkbox tables in this file are **historical / granular engineering milestones**; not every cell is re-audited when a feature goes live. If a line still shows `[ ]` while the README marks the feature as implemented, **trust the README and source** for "does the app include this feature?" and use this plan for **deep delivery tracking** and test mapping.
+
 ## Phase Overview
 
 ```

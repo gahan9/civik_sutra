@@ -1,30 +1,32 @@
 # Architecture
 
-Single monolithic Firebase deployment. Everything ships as one unit: frontend via Firebase Hosting, backend via Cloud Functions, data via Firestore.
+CivikSutra is one **React** SPA (`frontend/`) and one **FastAPI** app (`functions/`). Two **supported** deployment topologies share the same code: **(1) Firebase** (Hosting + Cloud Functions + Firestore) and **(2) Cloud Run** (SPA + API images from [cloudbuild.yaml](../cloudbuild.yaml), Firestore when wired). The README **Architecture** table summarizes paths A and B.
 
-## Deployment Topology
+## Deployment topology (unified)
 
 ```
-                    ┌──────────────────────┐
-                    │   Firebase Project    │
-                    │   (ignyt-39f6e)       │
-                    └──────────┬───────────┘
-                               │
-              ┌────────────────┼────────────────┐
-              │                │                │
-    ┌─────────▼──────┐ ┌──────▼───────┐ ┌──────▼──────┐
-    │ Firebase       │ │ Cloud        │ │ Cloud       │
-    │ Hosting        │ │ Functions    │ │ Firestore   │
-    │ (Static SPA)   │ │ (Python)     │ │ (NoSQL)     │
-    │                │ │              │ │             │
-    │ React+Vite     │ │ FastAPI-like │ │ Booth cache │
-    │ PWA bundle     │ │ HTTP fns     │ │ Candidate   │
-    │ Assets/i18n    │ │ Gemini calls │ │ Chat hist   │
-    └────────────────┘ │ Maps calls   │ │ Rate limits │
-                       └──────────────┘ └─────────────┘
+                    ┌───────────────────────────────────┐
+                    │  Browser (PWA)                    │
+                    └──────────────────┬──────────────────┘
+                                       │ HTTPS
+                    ┌──────────────────▼──────────────────┐
+                    │  Static: Firebase Hosting or        │
+                    │  Cloud Run civiksutra-web           │
+                    └──────────────────┬──────────────────┘
+                                       │
+                    ┌──────────────────▼──────────────────┐
+                    │  API: Cloud Functions or            │
+                    │  Cloud Run civiksutra-api (FastAPI) │
+                    └──────────┬─────────────┬────────────┘
+                               │             │
+              ┌────────────────┼─────────────┼────────────────┐
+    ┌─────────▼──────┐ ┌───────▼───────┐ ┌───▼──────────────┐
+    │ Firestore      │ │ Secrets        │ │ Gemini, Vertex,  │
+    │ cache / limits │ │                │ │ Translation, Maps│
+    └────────────────┘ └────────────────┘ └──────────────────┘
 ```
 
-## Why Monolithic Firebase
+## Why monolithic Firebase (path 1)
 
 | Concern | Firebase Answer |
 |---------|----------------|
@@ -35,6 +37,14 @@ Single monolithic Firebase deployment. Everything ships as one unit: frontend vi
 | Functions | Cloud Functions scale to zero, pay-per-invocation |
 | Local dev | Firebase Emulator Suite runs everything locally |
 | Cost | Spark (free) plan covers prototype; Blaze (pay-as-you-go) for production |
+
+### Cloud Run (path 2)
+
+| Concern | Cloud Run + Cloud Build answer |
+|---------|-------------------------------|
+| Build | `gcloud builds submit --config=cloudbuild.yaml` runs tests, builds `Dockerfile` + `Dockerfile.api`, pushes to Artifact Registry |
+| Serve | Two services: static nginx (`civiksutra-web`) and API (`civiksutra-api`); map custom domains in Cloud Run |
+| Parity | Same `functions` Python and `frontend` dist as local emulators; configure API base URL in the SPA build |
 
 ## Data Flow
 

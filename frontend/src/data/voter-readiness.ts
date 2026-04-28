@@ -31,8 +31,7 @@ export const APPLICATION_STEPS = [
   {
     step: 2,
     title: "Fill Form 6",
-    description:
-      "Enter personal details, address, and upload photo + documents",
+    description: "Enter personal details, address, and upload photo + documents",
     requiredDocs: ["Passport photo (<50KB)", "Age proof", "Address proof"],
   },
   {
@@ -43,8 +42,7 @@ export const APPLICATION_STEPS = [
   {
     step: 4,
     title: "Verification Visit",
-    description:
-      "BLO (Booth Level Officer) will visit your address for verification",
+    description: "BLO (Booth Level Officer) will visit your address for verification",
     timeline: "Usually within 7-15 days",
   },
   {

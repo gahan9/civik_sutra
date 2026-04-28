@@ -76,3 +76,20 @@ class ChatResponse(BaseModel):
     citations: list[SourceCitation] = Field(default_factory=list)
     tokens_used: int = 0
     tool_calls: list[ToolCallRecord] = Field(default_factory=list)
+
+
+class TranslateRequest(StrictModel):
+    """Request body for the dynamic content translation endpoint."""
+
+    text: str = Field(min_length=1, max_length=5000)
+    target_language: SupportedLanguage
+    source_language: SupportedLanguage | None = None
+
+
+class TranslateResponse(BaseModel):
+    """Response body returning translated text plus echoed metadata."""
+
+    text: str
+    target_language: SupportedLanguage
+    source_language: SupportedLanguage | None = None
+    cached: bool = False

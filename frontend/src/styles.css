@@ -1174,8 +1174,16 @@ input {
   font-size: 0.8rem;
 }
 
-.chat-tool-icon {
-  font-size: 0.9rem;
+.chat-tool-label {
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #3d4d6b;
+}
+
+.chat-tool-summary {
+  flex: 1;
 }
 
 .chat-input-bar {
@@ -1314,4 +1322,162 @@ input {
   .nav-bar {
     overflow-x: auto;
   }
+
+  .election-journey__steps {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+
+/* Guided journey + Google Calendar deep-link block */
+.election-journey {
+  margin: 0 auto 1rem;
+  max-width: min(1120px, calc(100% - 2rem));
+  padding: 0 0 0.5rem;
+}
+
+.election-journey__steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.15rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.election-journey__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.election-journey__btn {
+  min-height: 40px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  background: #e8efff;
+  color: #1a3a8a;
+  border-radius: 999px;
+  font-weight: 600;
+  border: 1px solid #c9d7f5;
+}
+
+.election-journey__btn--active {
+  background: #1f5eff;
+  color: #fff;
+  border-color: #1f5eff;
+}
+
+.election-journey__btn--done {
+  background: #d6e7d4;
+  color: #1d4f1a;
+  border-color: #94c290;
+}
+
+.election-journey__btn--done .election-journey__n {
+  background: rgb(29 79 26 / 18%);
+}
+
+.election-journey__btn--done.election-journey__btn--active {
+  background: #1f5eff;
+  color: #fff;
+  border-color: #1f5eff;
+}
+
+.election-journey__label {
+  white-space: nowrap;
+}
+
+.election-journey__hint {
+  margin: 0.6rem 0 0;
+  color: #4a5b80;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.election-journey__n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.35rem;
+  border-radius: 999px;
+  background: rgb(31 94 255 / 15%);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.election-journey__btn--active .election-journey__n {
+  background: rgb(255 255 255 / 25%);
+}
+
+.election-journey__sep {
+  color: #6b7a9c;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.election-dates {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #dce5f5;
+  border-radius: 16px;
+  background: #f8fbff;
+}
+
+.election-dates__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+}
+
+.election-dates__sub {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: #4a5b78;
+  line-height: 1.45;
+}
+
+.election-dates__list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.election-dates__link {
+  color: #1f5eff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Trust banner — official sources (civtech credibility) */
+.trust-banner {
+  max-width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto 0.75rem;
+  padding: 0.65rem 1rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #3d4a63;
+  background: #eef3fc;
+  border: 1px solid #c9d7f0;
+  border-radius: 12px;
+}
+
+.trust-banner__text {
+  margin: 0;
+}
+
+.trust-banner__link {
+  color: #1f5eff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.chat-msg-no-sources {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  color: #5a6578;
+  font-style: italic;
 }

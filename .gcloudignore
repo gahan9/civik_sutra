@@ -1,0 +1,43 @@
+# Patterns excluded from `gcloud builds submit` uploads.
+# Keep build context lean — Cloud Build charges per-second and bandwidth.
+
+.git/
+.github/
+.cursor/
+.cline_storage/
+.claude/
+
+# Editor / OS noise
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local dev artifacts
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+**/.mypy_cache/
+**/node_modules/
+**/dist/
+**/coverage/
+**/playwright-report/
+**/test-results/
+**/.next/
+**/.turbo/
+
+# Secrets and env files
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets.yaml
+
+# Docs and personal scratch (keep README; drop everything else)
+linkedin_post.md
+*.code-workspace
+
+# Build artefacts that the multi-stage Dockerfile will regenerate
+frontend/dist/
+functions/venv/

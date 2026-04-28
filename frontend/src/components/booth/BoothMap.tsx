@@ -37,9 +37,7 @@ export function BoothMap({
           <span className="user-dot">You</span>
           {booths.map((booth) => (
             <button
-              className={
-                booth.id === selectedBoothId ? "map-pin selected" : "map-pin"
-              }
+              className={booth.id === selectedBoothId ? "map-pin selected" : "map-pin"}
               key={booth.id}
               type="button"
               onClick={() => onSelectBooth(booth)}
@@ -63,9 +61,7 @@ export function BoothMap({
       }}
       zoom={14}
     >
-      {userLocation ? (
-        <MarkerF position={userLocation} title="Your location" />
-      ) : null}
+      {userLocation ? <MarkerF position={userLocation} title="Your location" /> : null}
       {booths.map((booth) => (
         <MarkerF
           key={booth.id}

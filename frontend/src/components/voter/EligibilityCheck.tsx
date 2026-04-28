@@ -14,7 +14,7 @@ interface EligibilityResult {
 function checkEligibility(
   age: number,
   citizen: CitizenType,
-  registered: RegisteredType,
+  registered: RegisteredType
 ): EligibilityResult | null {
   if (!citizen) return null;
 
@@ -50,8 +50,7 @@ function checkEligibility(
   if (registered === "not_sure") {
     return {
       eligible: true,
-      reason:
-        "Verify your registration on the NVSP portal or ECI Electoral Search.",
+      reason: "Verify your registration on the NVSP portal or ECI Electoral Search.",
       action: "check",
     };
   }

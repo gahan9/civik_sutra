@@ -8,7 +8,7 @@ import type {
 
 async function postJson<TRequest, TResponse>(
   path: string,
-  payload: TRequest,
+  payload: TRequest
 ): Promise<TResponse> {
   const response = await fetch(path, {
     method: "POST",
@@ -24,19 +24,19 @@ async function postJson<TRequest, TResponse>(
 }
 
 export function searchCandidates(
-  request: CandidateSearchRequest,
+  request: CandidateSearchRequest
 ): Promise<CandidateSearchResponse> {
   return postJson<CandidateSearchRequest, CandidateSearchResponse>(
     "/candidate/search",
-    request,
+    request
   );
 }
 
 export async function getCandidateBackground(
-  candidateId: string,
+  candidateId: string
 ): Promise<BackgroundReport> {
   const response = await fetch(
-    `/candidate/${encodeURIComponent(candidateId)}/background`,
+    `/candidate/${encodeURIComponent(candidateId)}/background`
   );
 
   if (!response.ok) {
@@ -46,11 +46,6 @@ export async function getCandidateBackground(
   return response.json() as Promise<BackgroundReport>;
 }
 
-export function compareCandidates(
-  request: CompareRequest,
-): Promise<ComparisonResult> {
-  return postJson<CompareRequest, ComparisonResult>(
-    "/candidate/compare",
-    request,
-  );
+export function compareCandidates(request: CompareRequest): Promise<ComparisonResult> {
+  return postJson<CompareRequest, ComparisonResult>("/candidate/compare", request);
 }

@@ -1,10 +1,7 @@
-import type {
-  ManifestoCompareRequest,
-  ManifestoComparison,
-} from "../types/manifesto";
+import type { ManifestoCompareRequest, ManifestoComparison } from "../types/manifesto";
 
 export async function compareManifestos(
-  request: ManifestoCompareRequest,
+  request: ManifestoCompareRequest
 ): Promise<ManifestoComparison> {
   const response = await fetch("/manifesto/compare", {
     method: "POST",
@@ -13,9 +10,7 @@ export async function compareManifestos(
   });
 
   if (!response.ok) {
-    throw new Error(
-      `Manifesto comparison failed with status ${response.status}`,
-    );
+    throw new Error(`Manifesto comparison failed with status ${response.status}`);
   }
 
   return response.json() as Promise<ManifestoComparison>;

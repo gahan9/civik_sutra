@@ -8,7 +8,7 @@ import type {
 
 async function postJson<TRequest, TResponse>(
   path: string,
-  payload: TRequest,
+  payload: TRequest
 ): Promise<TResponse> {
   const response = await fetch(path, {
     method: "POST",
@@ -25,26 +25,21 @@ async function postJson<TRequest, TResponse>(
   return response.json() as Promise<TResponse>;
 }
 
-export function findNearbyBooths(
-  request: NearbyRequest,
-): Promise<NearbyResponse> {
+export function findNearbyBooths(request: NearbyRequest): Promise<NearbyResponse> {
   return postJson<NearbyRequest, NearbyResponse>("/booth/nearby", request);
 }
 
 export function getBoothDirections(
-  request: DirectionsRequest,
+  request: DirectionsRequest
 ): Promise<DirectionsResult> {
-  return postJson<DirectionsRequest, DirectionsResult>(
-    "/booth/directions",
-    request,
-  );
+  return postJson<DirectionsRequest, DirectionsResult>("/booth/directions", request);
 }
 
 export async function verifyBoothAssignment(
-  epicNumber: string,
+  epicNumber: string
 ): Promise<BoothVerificationResult> {
   const response = await fetch(
-    `/booth/verify/${encodeURIComponent(epicNumber.trim())}`,
+    `/booth/verify/${encodeURIComponent(epicNumber.trim())}`
   );
 
   if (!response.ok) {

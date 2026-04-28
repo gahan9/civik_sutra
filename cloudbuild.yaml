@@ -1,0 +1,142 @@
+# CivikSutra Cloud Build pipeline.
+#
+# Trigger this from `gcloud builds submit` or a GitHub-connected build
+# trigger. Substitutions let the same pipeline target dev / staging / prod
+# without forking the YAML.
+#
+# Required substitutions (all have safe defaults):
+#   _REGION        Cloud Run region                  (default: asia-south1)
+#   _PROJECT_ID    Target project for Artifact Reg.   (default: $PROJECT_ID)
+#   _AR_REPO       Artifact Registry repository      (default: civiksutra)
+#   _FRONT_SERVICE Cloud Run service for the SPA      (default: civiksutra-web)
+#   _API_SERVICE   Cloud Run service for the FastAPI  (default: civiksutra-api)
+#   _DEPLOY        "true" to actually deploy          (default: "true")
+
+substitutions:
+  _REGION: asia-south1
+  _AR_REPO: civiksutra
+  _FRONT_SERVICE: civiksutra-web
+  _API_SERVICE: civiksutra-api
+  _DEPLOY: "true"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
+  dynamicSubstitutions: true
+
+steps:
+  # ---------- 1. Backend: install + lint + test ----------------------------
+  - id: functions-test
+    name: python:3.12-slim
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        cd functions
+        pip install --upgrade pip
+        pip install -e ".[test]" ruff
+        ruff check src
+        python -m pytest tests/ -q --cov=src --cov-report=term-missing
+    waitFor: ['-']
+
+  # ---------- 2. Frontend: install + lint + unit tests ---------------------
+  - id: frontend-test
+    name: node:20-alpine
+    entrypoint: sh
+    args:
+      - -ceu
+      - |
+        apk add --no-cache git
+        cd frontend
+        npm ci --no-audit --prefer-offline
+        npm run lint --if-present
+        npm run typecheck --if-present
+        npm run test:unit --if-present || npx vitest run
+    waitFor: ['-']
+
+  # ---------- 3. Build the SPA Docker image (multi-stage) -------------------
+  - id: build-frontend-image
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --file=Dockerfile
+      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:$SHORT_SHA
+      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:latest
+      - .
+    waitFor: ['frontend-test']
+
+  # ---------- 4. Build the FastAPI Docker image -----------------------------
+  - id: build-api-image
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --file=Dockerfile.api
+      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:$SHORT_SHA
+      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:latest
+      - .
+    waitFor: ['functions-test']
+
+  # ---------- 5. Push images to Artifact Registry ---------------------------
+  - id: push-frontend
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}
+    waitFor: ['build-frontend-image']
+
+  - id: push-api
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}
+    waitFor: ['build-api-image']
+
+  # ---------- 6. Deploy to Cloud Run (gated by _DEPLOY) --------------------
+  - id: deploy-frontend
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        if [ "${_DEPLOY}" != "true" ]; then
+          echo "Skipping deploy (--substitutions=_DEPLOY=false)"; exit 0
+        fi
+        gcloud run deploy ${_FRONT_SERVICE} \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:$SHORT_SHA \
+          --region=${_REGION} \
+          --platform=managed \
+          --allow-unauthenticated \
+          --port=8080 \
+          --cpu=1 --memory=512Mi --max-instances=10 \
+          --quiet
+    waitFor: ['push-frontend']
+
+  - id: deploy-api
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        if [ "${_DEPLOY}" != "true" ]; then
+          echo "Skipping deploy (--substitutions=_DEPLOY=false)"; exit 0
+        fi
+        gcloud run deploy ${_API_SERVICE} \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:$SHORT_SHA \
+          --region=${_REGION} \
+          --platform=managed \
+          --allow-unauthenticated \
+          --port=8080 \
+          --cpu=1 --memory=1Gi --max-instances=10 \
+          --set-env-vars=EP_GCP_PROJECT_ID=$PROJECT_ID,EP_TRANSLATE_LOCATION=global \
+          --quiet
+    waitFor: ['push-api']
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:$SHORT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:latest
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:$SHORT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:latest
+
+timeout: 1800s

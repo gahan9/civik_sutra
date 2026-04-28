@@ -70,7 +70,7 @@ export function useGeolocation(): UseGeolocationResult {
           enableHighAccuracy: true,
           timeout: 10000,
           maximumAge: 60000,
-        },
+        }
       );
     });
   }, []);

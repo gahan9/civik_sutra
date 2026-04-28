@@ -38,39 +38,35 @@ We leveraged AI extensively through intent-driven prompting and iterative refine
 
 ## Architecture
 
-Single monolithic deployment on Firebase. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for full details.
+The app is a **React SPA** talking to a **Python FastAPI** backend over HTTPS. You can run it in either of these **equivalent** topologies (same `frontend/` and `functions/` code):
+
+| Path | Static app | API | Typical use |
+|------|------------|-----|-------------|
+| **A — Firebase** | Firebase Hosting (CDN) | Cloud Functions (HTTP) wrapping the FastAPI app | Quick deploy, `firebase deploy`, public demo on `*.web.app` |
+| **B — Cloud Run** | Container: `civiksutra-web` (nginx + built SPA) | Container: `civiksutra-api` (FastAPI) | [cloudbuild.yaml](cloudbuild.yaml) → Artifact Registry → Cloud Run |
+
+Shared: **Firestore** (cache), **Gemini**, **Vertex** (FAQ embeddings), **Cloud Translation**, **Maps Platform**, etc. Full detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ```
-┌─────────────────────────────────────────────────────┐
-│              Firebase Hosting (PWA)                  │
-│         React 18 + Vite + Tailwind CSS              │
-│  ┌─────────┐ ┌─────────┐ ┌──────────┐ ┌─────────┐ │
-│  │  Map    │ │  Chat   │ │ Compare  │ │ Voter   │ │
-│  │  View   │ │  UI     │ │ Tables   │ │ Guide   │ │
-│  └────┬────┘ └────┬────┘ └────┬─────┘ └────┬────┘ │
-│       └───────────┴───────────┴─────────────┘      │
-│                       │                             │
-└───────────────────────┼─────────────────────────────┘
-                        │ HTTPS
-┌───────────────────────┼─────────────────────────────┐
-│          Firebase Cloud Functions (Python)           │
-│                                                     │
-│  ┌────────────┐ ┌─────────────┐ ┌────────────────┐ │
-│  │ Booth API  │ │ Candidate   │ │ Assistant API  │ │
-│  │ geo/traffic│ │ API search  │ │ Gemini stream  │ │
-│  └─────┬──────┘ └──────┬──────┘ └───────┬────────┘ │
-│        │               │                │           │
-│  ┌─────┴───────────────┴────────────────┴─────────┐ │
-│  │            Service Layer                       │ │
-│  │  GeoService │ CandidateService │ ChatService   │ │
-│  └────────────────────────────────────────────────┘ │
-│                        │                            │
-│  ┌─────────────────────┴──────────────────────────┐ │
-│  │         External Integrations                  │ │
-│  │  Google Maps Platform  │  Gemini API           │ │
-│  │  ECI / MyNeta data     │  Firestore (cache)    │ │
-│  └────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│  Browser (no EPIC / PII sent except what user types in forms)     │
+└───────────────────────────────┬──────────────────────────────────┘
+                                │ HTTPS
+        ┌───────────────────────┴───────────────────────┐
+        │  Static bundle: Firebase Hosting OR Cloud Run │
+        │  `civiksutra-web` (React 18 + Vite)              │
+        └───────────────────────┬───────────────────────┘
+                                │ JSON / SSE
+        ┌───────────────────────┴───────────────────────┐
+        │  API: Cloud Functions HTTP OR Cloud Run          │
+        │  `civiksutra-api` — booth / candidate / assistant│
+        │  GeoService │ CandidateService │ ChatService …     │
+        └───────────────────────┬───────────────────────┘
+                                │
+        ┌───────────────────────┴───────────────────────┐
+        │  Firestore │ Gemini │ Vertex FAQ │ Translate│
+        │  Maps (server) │ MyNeta / ECI scraping       │
+        └─────────────────────────────────────────────┘
 ```
 
 ## Tech Stack
@@ -79,7 +75,7 @@ Single monolithic deployment on Firebase. See [docs/ARCHITECTURE.md](docs/ARCHIT
 |-------|-----------|-----|
 | Frontend | React 18 + Vite + Tailwind CSS | Mobile-first PWA, fast HMR, utility-first styling |
 | Maps | Google Maps JavaScript API | Best India coverage, traffic layer, directions |
-| Backend | Firebase Cloud Functions (Python 3.12) | Single deploy target, auto-scaling, no infra management |
+| Backend | FastAPI in Cloud Functions or Cloud Run (Python 3.12) | Same codebase; pick Firebase or containerized Cloud Run |
 | AI | Gemini 2.0 Flash (Vertex AI) | Grounding with Google Search, streaming, multimodal |
 | Database | Cloud Firestore | Real-time sync, offline support, TTL for cache |
 | Auth | Firebase Auth (anonymous) | Zero-friction for civic app, no signup wall |
@@ -170,9 +166,33 @@ firebase emulators:start    # Functions + Firestore
 cd frontend && npm run dev  # Vite dev server at :5173
 ```
 
+## Quality & CI (Nirvachan-style gate)
+
+- **Frontend:** from `frontend/` run `npm run validate` (TypeScript, ESLint, Vitest with coverage), `npm run test:e2e` (Playwright: Chromium + mobile; `@axe-core/playwright` on landing), and `npm run build` + `npm run lhci` (Lighthouse CI against production preview; see `frontend/lighthouserc.json`).
+- **Cloud Functions:** from `functions/` run `pip install -e ".[test]"` then `python -m pytest tests/ -q --cov=src` (coverage fail-under 75% via `[tool.coverage.report]` in `pyproject.toml`).
+- **CI:** [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on push/PR: frontend validate (includes **Prettier** `format:check`) + E2E, backend tests + coverage, Lighthouse CI.
+- **CD (Firebase):** [`.github/workflows/deploy-firebase.yml`](.github/workflows/deploy-firebase.yml) runs on every push to `main` and deploys Hosting + Cloud Functions + Firestore. Add a repository secret `FIREBASE_TOKEN` (create with `firebase login:ci` using an account with deploy rights on the Firebase project).
+- **Manual (before recording a demo):** keyboard-only pass on the journey tabs, chat send, and trust-banner links; Lighthouse in CI is not a substitute for focus order on custom controls.
+- **Optional load check:** [docs/load-testing.md](docs/load-testing.md) and [`scripts/k6-health-smoke.js`](scripts/k6-health-smoke.js) for `/health` against Cloud Run after deploy.
+- **CD (Cloud Build):** [`cloudbuild.yaml`](cloudbuild.yaml) builds the multi-stage SPA image (`Dockerfile`) and the FastAPI image (`Dockerfile.api`), pushes both to Artifact Registry, then deploys them to Cloud Run. Substitutions allow targeting different envs:
+  ```bash
+  gcloud builds submit \
+    --config=cloudbuild.yaml \
+    --substitutions=_REGION=asia-south1,_AR_REPO=civiksutra,_FRONT_SERVICE=civiksutra-web,_API_SERVICE=civiksutra-api,_DEPLOY=true
+  ```
+  Set `_DEPLOY=false` for build-only validation runs (PR previews).
+
 ## Live Demo
 
-Deployed Firebase app: https://civiksutra-2604261729.web.app
+Deployed Firebase app: **https://civiksutra-2604261729.web.app** (set your public URL if different in your fork).
+
+**Demo video:** *Record a 2–3 minute walkthrough (see storyboard in [docs/PROMPT_JOURNEY.md](docs/PROMPT_JOURNEY.md)) and paste your Loom or YouTube URL here.*
+
+**AI / prompt log:** [docs/PROMPT_JOURNEY.md](docs/PROMPT_JOURNEY.md)
+
+**Data flow (PII / trust boundary):** [docs/DATA_FLOW.md](docs/DATA_FLOW.md)
+
+**Security:** [SECURITY.md](SECURITY.md)
 
 Current implemented slice:
 - Booth Finder UI with GPS and manual search entry points.

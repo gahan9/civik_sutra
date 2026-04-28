@@ -60,6 +60,10 @@ htmlcov/
 .pytest_cache/
 coverage/
 *.lcov
+playwright-report/
+test-results/
+.blob-report/
+.lighthouseci/
 
 # Logs
 *.log

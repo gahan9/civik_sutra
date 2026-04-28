@@ -1,8 +1,16 @@
 from __future__ import annotations
 
-import json
+# Load functions/.env before first-party imports use os.environ (emulator, deploy).
 import asyncio
+import json
+from pathlib import Path
 from typing import Any
+
+from dotenv import load_dotenv
+
+_env_file = Path(__file__).resolve().parent / ".env"
+if _env_file.is_file():
+    load_dotenv(_env_file)
 
 from pydantic import ValidationError
 from firebase_functions import https_fn

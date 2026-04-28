@@ -20,10 +20,7 @@ const dimensionLabels: Record<string, string> = {
   delivery_probability: "Delivery Probability",
 };
 
-export function CandidateCompare({
-  candidates,
-  onBack,
-}: CandidateCompareProps) {
+export function CandidateCompare({ candidates, onBack }: CandidateCompareProps) {
   const [result, setResult] = useState<ComparisonResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,9 +56,7 @@ export function CandidateCompare({
       </button>
 
       <p className="eyebrow">Candidate Comparison</p>
-      <h2 id="compare-title">
-        Side-by-Side Analysis ({candidates.length} candidates)
-      </h2>
+      <h2 id="compare-title">Side-by-Side Analysis ({candidates.length} candidates)</h2>
 
       {loading ? <p className="status">Generating comparison...</p> : null}
       {error ? <p className="alert">{error}</p> : null}
@@ -84,13 +79,9 @@ export function CandidateCompare({
               <tbody>
                 {result.dimensions.map((dim) => (
                   <tr key={dim}>
-                    <td className="compare-dim-label">
-                      {dimensionLabels[dim] ?? dim}
-                    </td>
+                    <td className="compare-dim-label">{dimensionLabels[dim] ?? dim}</td>
                     {candidates.map((c) => (
-                      <td key={c.id}>
-                        {result.candidates[c.id]?.[dim] ?? "N/A"}
-                      </td>
+                      <td key={c.id}>{result.candidates[c.id]?.[dim] ?? "N/A"}</td>
                     ))}
                   </tr>
                 ))}

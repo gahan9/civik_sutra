@@ -2,11 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getQuickQuestions, sendChatMessage } from "../../lib/chat-api";
-import type {
-  ChatMessage,
-  SourceCitation,
-  ToolCallRecord,
-} from "../../types/chat";
+import type { ChatMessage, SourceCitation, ToolCallRecord } from "../../types/chat";
 
 function generateSessionId(): string {
   return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -67,7 +63,7 @@ export function AssistantChat() {
         setLoading(false);
       }
     },
-    [loading, sessionId, i18n.language, t],
+    [loading, sessionId, i18n.language, t]
   );
 
   const handleKeyDown = useCallback(
@@ -77,7 +73,7 @@ export function AssistantChat() {
         handleSend(input);
       }
     },
-    [handleSend, input],
+    [handleSend, input]
   );
 
   return (
@@ -126,6 +122,13 @@ export function AssistantChat() {
                   <p key={i}>{line}</p>
                 ))}
               </div>
+              {msg.role === "assistant" &&
+                (!msg.citations || msg.citations.length === 0) &&
+                (!msg.tool_calls || msg.tool_calls.length === 0) && (
+                  <p className="chat-msg-no-sources" role="note">
+                    {t("chat.noWebCitations")}
+                  </p>
+                )}
               {msg.citations && msg.citations.length > 0 && (
                 <CitationList citations={msg.citations} />
               )}
@@ -138,9 +141,7 @@ export function AssistantChat() {
           {loading && (
             <div className="chat-msg chat-msg--assistant">
               <div className="chat-msg-role">CivikSutra</div>
-              <div className="chat-msg-content chat-typing">
-                {t("chat.thinking")}
-              </div>
+              <div className="chat-msg-content chat-typing">{t("chat.thinking")}</div>
             </div>
           )}
 
@@ -193,8 +194,8 @@ function ToolCallList({ toolCalls }: { toolCalls: ToolCallRecord[] }) {
     <div className="chat-tool-calls">
       {toolCalls.map((tc, idx) => (
         <div key={idx} className="chat-tool-call">
-          <span className="chat-tool-icon">🔧</span>
-          <span>{tc.result_summary}</span>
+          <span className="chat-tool-label">{tc.tool_name}</span>
+          <span className="chat-tool-summary">{tc.result_summary}</span>
         </div>
       ))}
     </div>

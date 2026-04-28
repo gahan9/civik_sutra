@@ -8,15 +8,13 @@ describe("BoothFinder", () => {
     render(<BoothFinder />);
 
     expect(
-      screen.getByRole("heading", { name: /find your polling booth/i }),
+      screen.getByRole("heading", { name: /find your polling booth/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /use my current location/i }),
+      screen.getByRole("button", { name: /use my current location/i })
     ).toBeInTheDocument();
     expect(screen.getByLabelText(/pincode or address/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/epic number/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/official verification required/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/official verification required/i)).toBeInTheDocument();
   });
 });

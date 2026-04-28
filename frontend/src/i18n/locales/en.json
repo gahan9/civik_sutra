@@ -3,12 +3,53 @@
     "title": "Election Assistant",
     "subtitle": "Your guide to informed voting"
   },
+  "trust": {
+    "ariaLabel": "Official information notice",
+    "body": "CivikSutra is for education only. Confirm dates, rolls, and rules on",
+    "linkEci": "Election Commission of India (ECI)",
+    "linkElectoralSearch": "ECI Electoral Search",
+    "linkNvsp": "NVSP (National Voters' Service Portal)",
+    "footer": "We do not endorse any party or candidate."
+  },
+  "journey": {
+    "label": "Voter journey (seven guided stages)",
+    "stepEligibility": "Eligibility",
+    "stepRegister": "Register",
+    "stepResearch": "Research",
+    "stepCompare": "Compare",
+    "stepLocate": "Locate",
+    "stepVote": "Vote",
+    "stepChat": "Ask AI",
+    "descEligibility": "Step 1 — Confirm you meet the constitutional voting requirements (citizenship, age, residency).",
+    "descRegister": "Step 2 — Get your name on the electoral roll and apply for a Voter ID (EPIC) card.",
+    "descResearch": "Step 3 — Research candidates contesting in your constituency, including affidavits and background.",
+    "descCompare": "Step 4 — Compare party manifestos side-by-side across key policy areas before deciding.",
+    "descLocate": "Step 5 — Find your assigned polling booth, get directions, and check accessibility features.",
+    "descVote": "Step 6 — Run through the booth checklist, EVM/VVPAT procedure, and what to carry on poll day.",
+    "descChat": "Step 7 — Ask the AI coach anything about the Indian election process; cited and neutral."
+  },
   "nav": {
-    "booth": "Booth Finder",
-    "candidates": "Candidates",
-    "manifesto": "Manifestos",
-    "voter": "Voter Guide",
-    "chat": "Ask AI"
+    "eligibility": "Eligibility",
+    "register": "Register",
+    "research": "Candidates",
+    "compare": "Manifestos",
+    "locate": "Booth Finder",
+    "vote": "Vote-day Prep",
+    "chat": "Ask AI",
+    "voter": "Voter Guide"
+  },
+  "calendar": {
+    "title": "Key election dates (reminders)",
+    "subtitle": "Illustrative dates — always confirm the official ECI and state election commission schedule, then adjust these Google Calendar links.",
+    "addToCalendar": "Add to Google Calendar",
+    "loadingLive": "Loading live election calendar…",
+    "liveSourceLabel": "Live ECI calendar",
+    "ev1Title": "Check electoral roll & registration window",
+    "ev1Details": "Verify your name on the roll and note Form 6 deadlines for your state (example slot — replace with current CEO dates).",
+    "ev2Title": "Polling day (example)",
+    "ev2Details": "Carry one approved photo ID, arrive in good time, and follow Model Code of Conduct. Replace with your official polling day.",
+    "ev3Title": "Counting & ECI result updates (example)",
+    "ev3Details": "Follow eci.gov.in and state CEO sites for final certified results. Replace with the official count schedule."
   },
   "booth": {
     "title": "Find Your Polling Booth",
@@ -85,7 +126,8 @@
     "send": "Send",
     "quickQuestions": "Quick Questions:",
     "thinking": "Thinking...",
-    "errorResponse": "I'm sorry, I couldn't process your question right now."
+    "errorResponse": "I'm sorry, I couldn't process your question right now.",
+    "noWebCitations": "This reply has no web sources attached. For official requirements and dates, use the ECI, Electoral Search, and NVSP links in the notice above."
   },
   "common": {
     "loading": "Loading...",

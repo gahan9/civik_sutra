@@ -78,8 +78,8 @@ export function BoothProcedure() {
         <p>
           NOTA (None Of The Above) is the last option on the EVM. If you feel no
           candidate deserves your vote, you can press NOTA. While NOTA votes are
-          counted, even if NOTA gets the most votes, the candidate with the
-          highest regular votes wins.
+          counted, even if NOTA gets the most votes, the candidate with the highest
+          regular votes wins.
         </p>
       </div>
 
@@ -87,14 +87,13 @@ export function BoothProcedure() {
         <h3>About EVM & VVPAT</h3>
         <p>
           <strong>EVM (Electronic Voting Machine)</strong> stores your vote
-          electronically. It runs on battery, cannot be connected to any
-          network, and stores votes in a tamper-proof chip.
+          electronically. It runs on battery, cannot be connected to any network, and
+          stores votes in a tamper-proof chip.
         </p>
         <p>
-          <strong>VVPAT (Voter Verifiable Paper Audit Trail)</strong> prints a
-          paper slip after each vote, allowing you to verify that your vote was
-          recorded correctly. The slip drops into a sealed box for potential
-          audit.
+          <strong>VVPAT (Voter Verifiable Paper Audit Trail)</strong> prints a paper
+          slip after each vote, allowing you to verify that your vote was recorded
+          correctly. The slip drops into a sealed box for potential audit.
         </p>
       </div>
     </div>

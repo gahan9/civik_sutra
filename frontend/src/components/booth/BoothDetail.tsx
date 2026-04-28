@@ -17,11 +17,7 @@ const sourceLabels: Record<BoothResult["data_source"], string> = {
   demo_fallback: "Demo fallback",
 };
 
-export function BoothDetail({
-  booth,
-  onDirections,
-  onVerify,
-}: BoothDetailProps) {
+export function BoothDetail({ booth, onDirections, onVerify }: BoothDetailProps) {
   return (
     <article className="booth-card">
       <div>
@@ -34,13 +30,11 @@ export function BoothDetail({
         <h3>{booth.name}</h3>
         <p>{booth.address}</p>
         <p className="muted">
-          {booth.constituency} constituency, {booth.distance_km.toFixed(1)} km
-          away
+          {booth.constituency} constituency, {booth.distance_km.toFixed(1)} km away
         </p>
         {!booth.is_official_assignment ? (
           <p className="verification-note">
-            Nearby place only. Verify your assigned booth with ECI before
-            voting.
+            Nearby place only. Verify your assigned booth with ECI before voting.
           </p>
         ) : null}
       </div>
@@ -66,11 +60,7 @@ export function BoothDetail({
         <button type="button" onClick={() => onDirections(booth)}>
           Directions
         </button>
-        <button
-          className="secondary"
-          type="button"
-          onClick={() => onVerify(booth)}
-        >
+        <button className="secondary" type="button" onClick={() => onVerify(booth)}>
           Verify Booth
         </button>
       </div>

@@ -100,8 +100,8 @@ export function BoothFinder() {
         <p className="eyebrow">CivikSutra Booth Finder</p>
         <h1>Find Your Polling Booth</h1>
         <p>
-          Find nearby polling places, see travel guidance, and verify your
-          official assigned booth through the Election Commission before voting.
+          Find nearby polling places, see travel guidance, and verify your official
+          assigned booth through the Election Commission before voting.
         </p>
         <div className="impact-grid" aria-label="CivikSutra value highlights">
           <span>GPS booth discovery</span>
@@ -114,9 +114,7 @@ export function BoothFinder() {
             {geolocation.loading ? "Locating..." : "Use my current location"}
           </button>
         </div>
-        {geolocation.error ? (
-          <p className="alert">{geolocation.error}</p>
-        ) : null}
+        {geolocation.error ? <p className="alert">{geolocation.error}</p> : null}
       </section>
 
       <section className="manual-search" aria-labelledby="manual-search-title">
@@ -141,9 +139,9 @@ export function BoothFinder() {
           <p className="eyebrow">Official verification required</p>
           <h2 id="trust-title">Nearest booth is guidance, not assignment</h2>
           <p>
-            Indian polling booths are assigned from the electoral roll.
-            CivikSutra helps you locate nearby polling places and then hands off
-            to ECI for authoritative verification.
+            Indian polling booths are assigned from the electoral roll. CivikSutra helps
+            you locate nearby polling places and then hands off to ECI for authoritative
+            verification.
           </p>
         </div>
         <label htmlFor="epic-number">EPIC number for ECI lookup</label>
@@ -152,16 +150,13 @@ export function BoothFinder() {
             id="epic-number"
             name="epic-number"
             value={epicNumber}
-            onChange={(event) =>
-              setEpicNumber(event.target.value.toUpperCase())
-            }
+            onChange={(event) => setEpicNumber(event.target.value.toUpperCase())}
             placeholder="e.g. ABC1234567"
           />
           <a
             className="button-link secondary"
             href={
-              nearby?.official_verification_url ??
-              "https://electoralsearch.eci.gov.in/"
+              nearby?.official_verification_url ?? "https://electoralsearch.eci.gov.in/"
             }
             rel="noreferrer"
             target="_blank"
@@ -215,10 +210,7 @@ export function BoothFinder() {
       </section>
 
       {directions ? (
-        <section
-          className="directions-panel"
-          aria-labelledby="directions-title"
-        >
+        <section className="directions-panel" aria-labelledby="directions-title">
           <h2 id="directions-title">Directions</h2>
           <p>
             {directions.distance}, {directions.duration}

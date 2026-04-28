@@ -29,13 +29,8 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 
 export function ManifestoComparison() {
   const { t } = useTranslation();
-  const [selectedParties, setSelectedParties] = useState<string[]>([
-    "BJP",
-    "INC",
-  ]);
-  const [comparison, setComparison] = useState<ManifestoComparisonData | null>(
-    null,
-  );
+  const [selectedParties, setSelectedParties] = useState<string[]>(["BJP", "INC"]);
+  const [comparison, setComparison] = useState<ManifestoComparisonData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,7 +77,7 @@ export function ManifestoComparison() {
   return (
     <div className="shell">
       <section className="hero">
-        <p className="eyebrow">{t("nav.manifesto")}</p>
+        <p className="eyebrow">{t("nav.compare")}</p>
         <h1>{t("manifesto.title")}</h1>
         <p>{t("manifesto.subtitle")}</p>
       </section>
@@ -141,26 +136,24 @@ export function ManifestoComparison() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(comparison.categories).map(
-                    ([cat, partyData]) => (
-                      <tr key={cat}>
-                        <td className="compare-dim-label">
-                          {CATEGORY_LABELS[cat] ?? cat}
+                  {Object.entries(comparison.categories).map(([cat, partyData]) => (
+                    <tr key={cat}>
+                      <td className="compare-dim-label">
+                        {CATEGORY_LABELS[cat] ?? cat}
+                      </td>
+                      {comparison.parties.map((party) => (
+                        <td key={party}>
+                          <ul className="manifesto-promises">
+                            {(partyData[party] ?? ["Not addressed"]).map(
+                              (promise, idx) => (
+                                <li key={idx}>{promise}</li>
+                              )
+                            )}
+                          </ul>
                         </td>
-                        {comparison.parties.map((party) => (
-                          <td key={party}>
-                            <ul className="manifesto-promises">
-                              {(partyData[party] ?? ["Not addressed"]).map(
-                                (promise, idx) => (
-                                  <li key={idx}>{promise}</li>
-                                ),
-                              )}
-                            </ul>
-                          </td>
-                        ))}
-                      </tr>
-                    ),
-                  )}
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -174,14 +167,12 @@ export function ManifestoComparison() {
           {comparison.past_promises && (
             <section className="compare-panel" style={{ marginTop: "1rem" }}>
               <h2>{t("manifesto.pastPromises")}</h2>
-              {Object.entries(comparison.past_promises).map(
-                ([party, promises]) => (
-                  <div key={party} className="promise-section">
-                    <h3>{party} — 2019 Manifesto Promises</h3>
-                    <PromiseTable promises={promises} />
-                  </div>
-                ),
-              )}
+              {Object.entries(comparison.past_promises).map(([party, promises]) => (
+                <div key={party} className="promise-section">
+                  <h3>{party} — 2019 Manifesto Promises</h3>
+                  <PromiseTable promises={promises} />
+                </div>
+              ))}
             </section>
           )}
 
@@ -197,11 +188,7 @@ export function ManifestoComparison() {
               {comparison.sources.map((s, i) => (
                 <span key={i}>
                   {s.manifesto_url ? (
-                    <a
-                      href={s.manifesto_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={s.manifesto_url} target="_blank" rel="noopener noreferrer">
                       {s.party}
                     </a>
                   ) : (

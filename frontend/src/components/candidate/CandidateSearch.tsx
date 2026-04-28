@@ -1,10 +1,7 @@
 import { FormEvent, useState } from "react";
 
 import { searchCandidates } from "../../lib/candidate-api";
-import type {
-  CandidateSearchResponse,
-  CandidateSummary,
-} from "../../types/candidate";
+import type { CandidateSearchResponse, CandidateSummary } from "../../types/candidate";
 import { useGeolocation } from "../../hooks/useGeolocation";
 import { CandidateCard } from "./CandidateCard";
 import { CandidateCompare } from "./CandidateCompare";
@@ -17,12 +14,14 @@ export function CandidateSearch() {
   const geolocation = useGeolocation();
 
   const [query, setQuery] = useState("");
-  const [searchResult, setSearchResult] =
-    useState<CandidateSearchResponse | null>(null);
+  const [searchResult, setSearchResult] = useState<CandidateSearchResponse | null>(
+    null
+  );
   const [selected, setSelected] = useState<CandidateSummary[]>([]);
   const [view, setView] = useState<View>("search");
-  const [profileCandidate, setProfileCandidate] =
-    useState<CandidateSummary | null>(null);
+  const [profileCandidate, setProfileCandidate] = useState<CandidateSummary | null>(
+    null
+  );
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -116,8 +115,8 @@ export function CandidateSearch() {
         <p className="eyebrow">CivikSutra Candidate Intelligence</p>
         <h1>Research Your Candidates</h1>
         <p>
-          Get background checks, criminal records, asset declarations, and
-          AI-powered comparative analysis for candidates in your constituency.
+          Get background checks, criminal records, asset declarations, and AI-powered
+          comparative analysis for candidates in your constituency.
         </p>
         <div className="impact-grid" aria-label="Feature highlights">
           <span>Background search</span>
@@ -127,10 +126,7 @@ export function CandidateSearch() {
         </div>
       </section>
 
-      <section
-        className="manual-search"
-        aria-labelledby="candidate-search-title"
-      >
+      <section className="manual-search" aria-labelledby="candidate-search-title">
         <h2 id="candidate-search-title">Find Your Candidates</h2>
         <form onSubmit={(event) => void handleSearch(event)}>
           <label htmlFor="constituency-search">Constituency name</label>
@@ -154,9 +150,7 @@ export function CandidateSearch() {
             {geolocation.loading ? "Detecting location..." : "Use my location"}
           </button>
         </div>
-        {geolocation.error ? (
-          <p className="alert">{geolocation.error}</p>
-        ) : null}
+        {geolocation.error ? <p className="alert">{geolocation.error}</p> : null}
       </section>
 
       {error ? <p className="alert">{error}</p> : null}
@@ -195,22 +189,20 @@ export function CandidateSearch() {
               <p className="muted">Select at least 2 candidates to compare</p>
             ) : null}
             {selected.length >= MAX_COMPARE ? (
-              <p className="muted">
-                Maximum {MAX_COMPARE} candidates for comparison
-              </p>
+              <p className="muted">Maximum {MAX_COMPARE} candidates for comparison</p>
             ) : null}
           </div>
 
           <p className="source-note">
-            Data sourced from MyNeta.info and ECI affidavits. Recent news via
-            Gemini grounding search. Always verify with official records.
+            Data sourced from MyNeta.info and ECI affidavits. Recent news via Gemini
+            grounding search. Always verify with official records.
           </p>
         </section>
       ) : (
         <section className="candidate-results">
           <p className="empty-state">
-            Search by constituency name or use your location to discover
-            candidates contesting in your area.
+            Search by constituency name or use your location to discover candidates
+            contesting in your area.
           </p>
         </section>
       )}
