@@ -1,4 +1,10 @@
 # CivikSutra: smoke (fast) then full (coverage, all E2E, Lighthouse)
+#
+# Optional repo secrets/vars (same names as deploy) so build/test match production:
+#   secrets: EP_GEMINI_API_KEY, EP_GOOGLE_MAPS_API_KEY, EP_RECAPTCHA_SECRET_KEY
+#   vars:   EP_GCP_PROJECT_ID (optional; tests mostly mock)
+# Optional: VITE_ maps key uses EP_GOOGLE_MAPS_API_KEY for CI builds (Lighthouse).
+# Fork PRs: secrets/vars are unavailable; env is empty; tests are mocked.
 name: CI
 
 on:
@@ -14,6 +20,12 @@ jobs:
   # Smallest: fast path (runs in parallel). Full jobs wait for both.
   smoke-frontend:
     runs-on: ubuntu-latest
+    env:
+      EP_GEMINI_API_KEY: ${{ secrets.EP_GEMINI_API_KEY }}
+      EP_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_RECAPTCHA_SECRET_KEY: ${{ secrets.EP_RECAPTCHA_SECRET_KEY }}
+      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_GCP_PROJECT_ID: ${{ vars.EP_GCP_PROJECT_ID }}
     defaults:
       run:
         working-directory: frontend
@@ -37,6 +49,11 @@ jobs:
 
   smoke-functions:
     runs-on: ubuntu-latest
+    env:
+      EP_GEMINI_API_KEY: ${{ secrets.EP_GEMINI_API_KEY }}
+      EP_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_RECAPTCHA_SECRET_KEY: ${{ secrets.EP_RECAPTCHA_SECRET_KEY }}
+      EP_GCP_PROJECT_ID: ${{ vars.EP_GCP_PROJECT_ID }}
     defaults:
       run:
         working-directory: functions
@@ -55,6 +72,12 @@ jobs:
   frontend:
     needs: [smoke-frontend, smoke-functions]
     runs-on: ubuntu-latest
+    env:
+      EP_GEMINI_API_KEY: ${{ secrets.EP_GEMINI_API_KEY }}
+      EP_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_RECAPTCHA_SECRET_KEY: ${{ secrets.EP_RECAPTCHA_SECRET_KEY }}
+      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_GCP_PROJECT_ID: ${{ vars.EP_GCP_PROJECT_ID }}
     defaults:
       run:
         working-directory: frontend
@@ -79,6 +102,11 @@ jobs:
   functions:
     needs: [smoke-frontend, smoke-functions]
     runs-on: ubuntu-latest
+    env:
+      EP_GEMINI_API_KEY: ${{ secrets.EP_GEMINI_API_KEY }}
+      EP_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_RECAPTCHA_SECRET_KEY: ${{ secrets.EP_RECAPTCHA_SECRET_KEY }}
+      EP_GCP_PROJECT_ID: ${{ vars.EP_GCP_PROJECT_ID }}
     defaults:
       run:
         working-directory: functions
@@ -96,6 +124,12 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     needs: [frontend, functions]
+    env:
+      EP_GEMINI_API_KEY: ${{ secrets.EP_GEMINI_API_KEY }}
+      EP_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_RECAPTCHA_SECRET_KEY: ${{ secrets.EP_RECAPTCHA_SECRET_KEY }}
+      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.EP_GOOGLE_MAPS_API_KEY }}
+      EP_GCP_PROJECT_ID: ${{ vars.EP_GCP_PROJECT_ID }}
     defaults:
       run:
         working-directory: frontend
