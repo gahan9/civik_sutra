@@ -32,6 +32,7 @@ export interface ChatResponse {
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
+  originalContent?: string;
   citations?: SourceCitation[];
   tool_calls?: ToolCallRecord[];
 }

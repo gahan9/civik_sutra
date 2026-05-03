@@ -54,7 +54,7 @@ test.describe("CivikSutra smoke", () => {
     await stubAssistantTimeline(page);
     await page.goto("/");
     const results = await new AxeBuilder({ page })
-      .disableRules(["color-contrast"])
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();
     expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
   });

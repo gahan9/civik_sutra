@@ -59,16 +59,26 @@ export async function getElectionTimeline(
   return data.events ?? [];
 }
 
+export type SupportedLanguage =
+  | "en"
+  | "hi"
+  | "ta"
+  | "te"
+  | "bn"
+  | "mr"
+  | "gu"
+  | "kn";
+
 export type TranslateRequestBody = {
   text: string;
-  target_language: "en" | "hi";
-  source_language?: "en" | "hi";
+  target_language: SupportedLanguage;
+  source_language?: SupportedLanguage;
 };
 
 export type TranslateResponseBody = {
   text: string;
-  target_language: "en" | "hi";
-  source_language?: "en" | "hi" | null;
+  target_language: SupportedLanguage;
+  source_language?: SupportedLanguage | null;
 };
 
 export async function translateDynamicContent(

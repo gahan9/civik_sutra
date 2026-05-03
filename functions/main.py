@@ -15,17 +15,20 @@ if _env_file.is_file():
 from pydantic import ValidationError
 from firebase_functions import https_fn
 
-from src.models.chat import ChatRequest
+from src.models.chat import ChatRequest, TranslateRequest
 from src.models.booth import NearbyRequest, DirectionsRequest
 from src.models.candidate import (
     CompareRequest,
     CandidateSearchRequest,
 )
 from src.models.manifesto import ManifestoCompareRequest
+from src.data.election_timeline import ELECTION_EVENTS
 from src.services.geo_service import GeoService
 from src.services.chat_service import ChatService
 from src.services.candidate_service import CandidateService
 from src.services.manifesto_service import ManifestoService
+from src.services.analytics_service import AnalyticsService
+from src.services.translation_service import TranslationService
 
 
 @https_fn.on_request(region="asia-south1")
@@ -38,6 +41,8 @@ def api(req: Any) -> Any:
     candidate_svc = CandidateService()
     manifesto_svc = ManifestoService()
     chat_svc = ChatService()
+    translation_svc = TranslationService()
+    analytics_svc = AnalyticsService()
     path = req.path.rstrip("/") or "/"
 
     try:
@@ -122,11 +127,17 @@ def api(req: Any) -> Any:
             chat_payload = ChatRequest.model_validate(
                 req.get_json(silent=True) or {},
             )
+            location = (
+                chat_payload.location.model_dump()
+                if chat_payload.location
+                else None
+            )
             chat_result = asyncio.run(
                 chat_svc.chat(
                     message=chat_payload.message,
                     session_id=chat_payload.session_id,
                     language=chat_payload.language,
+                    location=location,
                 )
             )
             return _response(chat_result.model_dump())
@@ -135,6 +146,44 @@ def api(req: Any) -> Any:
             lang = req.args.get("language", "en")
             questions = chat_svc.get_quick_questions(lang)
             return _response({"questions": questions})
+
+        if req.method == "GET" and path == "/assistant/timeline":
+            stage = req.args.get("stage")
+            events = ELECTION_EVENTS
+            if stage:
+                normalised = stage.strip().lower()
+                events = [
+                    e for e in events if normalised in e["stage"].lower()
+                ]
+            return _response({"events": events, "count": len(events)})
+
+        if req.method == "POST" and path == "/assistant/translate":
+            translate_payload = TranslateRequest.model_validate(
+                req.get_json(silent=True) or {},
+            )
+            translated = translation_svc.translate(
+                translate_payload.text,
+                target_language=translate_payload.target_language,
+                source_language=translate_payload.source_language,
+            )
+            return _response({
+                "text": translated,
+                "target_language": translate_payload.target_language,
+                "source_language": translate_payload.source_language,
+            })
+
+        if req.method == "POST" and path == "/analytics/event":
+            body = req.get_json(silent=True) or {}
+            event_name = body.get("event", "")
+            if not event_name:
+                return _response({"detail": "event is required"}, status=400)
+            analytics_svc.log_event(
+                event_name,
+                language=body.get("language", "en"),
+                journey_stage=body.get("journey_stage"),
+                metadata=body.get("metadata"),
+            )
+            return _response({"status": "accepted"})
 
     except ValidationError as error:
         return _response({"detail": error.errors()}, status=422)

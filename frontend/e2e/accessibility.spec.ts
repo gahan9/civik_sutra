@@ -15,8 +15,7 @@ test.describe("WCAG 2.1 AA accessibility", () => {
   test("landing page has no critical axe violations", async ({ page }) => {
     await page.goto("/");
     const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-      .disableRules(["color-contrast"])
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();
     expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
   });
@@ -28,8 +27,7 @@ test.describe("WCAG 2.1 AA accessibility", () => {
       await nav.getByRole("button", { name: stage.name, exact: true }).click();
 
       const results = await new AxeBuilder({ page })
-        .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-        .disableRules(["color-contrast"])
+        .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
         .analyze();
 
       expect(

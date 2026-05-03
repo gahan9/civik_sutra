@@ -634,4 +634,87 @@ FAQ_CORPUS: Final[list[FAQEntry]] = [
         "source": "NVSP Portal",
         "source_url": "https://www.nvsp.in",
     },
+    {
+        "id": "rules-repoll",
+        "topic": "Rights & Rules",
+        "question": "When does the ECI order a re-poll?",
+        "answer": (
+            "The ECI may order a re-poll under Section 58A of the "
+            "Representation of the People Act, 1951 if booth capturing, "
+            "destruction of EVMs, natural calamity, or serious procedural "
+            "irregularities are reported. The decision is taken before the "
+            "counting date on the basis of observer reports."
+        ),
+        "source": "Representation of the People Act, 1951",
+        "source_url": "https://eci.gov.in",
+    },
+    {
+        "id": "results-election-petition",
+        "topic": "Results",
+        "question": "What is an election petition and how does it work?",
+        "answer": (
+            "An election petition is a statutory remedy under Sections 80-100 "
+            "of the Representation of the People Act, 1951 to challenge the "
+            "result of a constituency. It is tried by the High Court and "
+            "grounds include corrupt practices, non-compliance with the Act, "
+            "or improper acceptance/rejection of nomination."
+        ),
+        "source": "Representation of the People Act, 1951",
+        "source_url": "https://eci.gov.in",
+    },
+    {
+        "id": "general-delimitation",
+        "topic": "General",
+        "question": "What is the Delimitation Commission?",
+        "answer": (
+            "The Delimitation Commission is a constitutional body (Article 82) "
+            "appointed after each census to redraw Lok Sabha and Assembly "
+            "constituency boundaries to ensure roughly equal population per "
+            "seat. Its orders have the force of law and are not justiciable."
+        ),
+        "source": "Election Commission of India",
+        "source_url": "https://eci.gov.in",
+    },
+    {
+        "id": "general-panchayat-municipal",
+        "topic": "General",
+        "question": "How are Panchayat and Municipal elections different from general elections?",
+        "answer": (
+            "Panchayat (73rd Amendment) and Municipal (74th Amendment) "
+            "elections are conducted by State Election Commissions, not the "
+            "ECI. They use paper ballots in many states, have reserved seats "
+            "for SC/ST/OBC/women based on state rules, and follow state-"
+            "specific electoral laws rather than the Representation of the "
+            "People Act."
+        ),
+        "source": "Constitution of India, Articles 243K & 243ZA",
+        "source_url": "https://eci.gov.in",
+    },
+    {
+        "id": "general-expenditure-limit",
+        "topic": "General",
+        "question": "What is the election expenditure limit for candidates?",
+        "answer": (
+            "The ECI sets maximum expenditure limits per candidate per "
+            "constituency. For Lok Sabha 2024, the limit was INR 95 lakh in "
+            "larger states and INR 75 lakh in smaller states. Candidates must "
+            "file a true account of expenses within 30 days of results."
+        ),
+        "source": "Election Commission of India",
+        "source_url": "https://eci.gov.in",
+    },
+    {
+        "id": "general-political-party-registration",
+        "topic": "General",
+        "question": "How is a political party registered in India?",
+        "answer": (
+            "A party applies to the ECI under Section 29A of the "
+            "Representation of the People Act, 1951 with its constitution, "
+            "rules, leadership list, and a 100-rupee application fee. "
+            "Recognition as a state or national party requires winning a "
+            "minimum number of seats or vote share in elections."
+        ),
+        "source": "Representation of the People Act, 1951",
+        "source_url": "https://eci.gov.in",
+    },
 ]

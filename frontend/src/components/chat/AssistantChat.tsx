@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getQuickQuestions, sendChatMessage } from "../../lib/chat-api";
+import {
+  getQuickQuestions,
+  sendChatMessage,
+  translateDynamicContent,
+} from "../../lib/chat-api";
+import type { SupportedLanguage } from "../../lib/chat-api";
 import type { ChatMessage, SourceCitation, ToolCallRecord } from "../../types/chat";
 
 function generateSessionId(): string {
@@ -44,9 +49,23 @@ export function AssistantChat() {
           language: i18n.language,
         });
 
+        const SUPPORTED_LANGS = new Set([
+          "en", "hi", "ta", "te", "bn", "mr", "gu", "kn",
+        ]);
+        let displayContent = response.response;
+        const lang = i18n.language;
+        if (SUPPORTED_LANGS.has(lang) && lang !== "en") {
+          displayContent = await translateDynamicContent({
+            text: response.response,
+            target_language: lang as SupportedLanguage,
+            source_language: "en",
+          });
+        }
+
         const assistantMessage: ChatMessage = {
           role: "assistant",
-          content: response.response,
+          content: displayContent,
+          originalContent: response.response,
           citations: response.citations,
           tool_calls: response.tool_calls,
         };

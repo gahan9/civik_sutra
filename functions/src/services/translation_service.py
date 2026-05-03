@@ -25,7 +25,9 @@ from functools import lru_cache
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_LANGUAGES: frozenset[str] = frozenset({"en", "hi"})
+SUPPORTED_LANGUAGES: frozenset[str] = frozenset(
+    {"en", "hi", "ta", "te", "bn", "mr", "gu", "kn"}
+)
 DEFAULT_CACHE_SIZE = 1024
 MAX_INPUT_CHARS = 5_000
 
