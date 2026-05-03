@@ -185,11 +185,35 @@ cd frontend && npm run dev  # Vite dev server at :5173
   ```
   Set `_DEPLOY=false` for build-only validation runs (PR previews).
 
+## Screenshots
+
+| Desktop — 7-stage voter journey | Desktop — AI coach with citations |
+|---|---|
+| ![Journey](docs/screenshots/desktop-journey.png) | ![AI Coach](docs/screenshots/desktop-chat.png) |
+
+| Mobile — Booth Finder | Mobile — Hindi language |
+|---|---|
+| ![Booth](docs/screenshots/mobile-booth.png) | ![Hindi](docs/screenshots/mobile-hindi.png) |
+
+> **Note:** Screenshots are captured at Desktop (1280×720) and Mobile (375×812) viewports.
+
+## Demo Video Storyboard (2–3 min)
+
+| Timestamp | Scene | Content |
+|---|---|---|
+| 0:00–0:20 | Problem statement | 950M voters, complex multi-type election system, information gap |
+| 0:20–0:50 | Journey walkthrough | Click all 7 stages: Eligibility → Register → Research → Compare → Locate → Vote → Ask AI |
+| 0:50–1:30 | AI coach demo | Ask a question, show tool-call badges (eligibility check, FAQ lookup), show citations |
+| 1:30–1:50 | Language toggle | Switch to Hindi, show dynamically translated AI response |
+| 1:50–2:20 | Technical depth | GitHub CI passing, Lighthouse scores, 186 backend tests at 85%+ coverage |
+| 2:20–2:40 | Architecture | `cloudbuild.yaml`, Terraform config, dual Docker images, 8 GCP services |
+| 2:40–3:00 | Close | Non-partisan stance, ECI/NVSP links, trust banner |
+
 ## Live Demo
 
 Deployed Firebase app: **https://civiksutra-2604261729.web.app** (set your public URL if different in your fork).
 
-**Demo video:** *Record a 2–3 minute walkthrough (see storyboard in [docs/PROMPT_JOURNEY.md](docs/PROMPT_JOURNEY.md)) and paste your Loom or YouTube URL here.*
+**Demo video:** *Record using the storyboard above and paste your Loom or YouTube URL here.*
 
 **AI / prompt log:** [docs/PROMPT_JOURNEY.md](docs/PROMPT_JOURNEY.md)
 

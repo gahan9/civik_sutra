@@ -50,7 +50,14 @@ export function AssistantChat() {
         });
 
         const SUPPORTED_LANGS = new Set([
-          "en", "hi", "ta", "te", "bn", "mr", "gu", "kn",
+          "en",
+          "hi",
+          "ta",
+          "te",
+          "bn",
+          "mr",
+          "gu",
+          "kn",
         ]);
         let displayContent = response.response;
         const lang = i18n.language;

@@ -59,15 +59,7 @@ export async function getElectionTimeline(
   return data.events ?? [];
 }
 
-export type SupportedLanguage =
-  | "en"
-  | "hi"
-  | "ta"
-  | "te"
-  | "bn"
-  | "mr"
-  | "gu"
-  | "kn";
+export type SupportedLanguage = "en" | "hi" | "ta" | "te" | "bn" | "mr" | "gu" | "kn";
 
 export type TranslateRequestBody = {
   text: string;
