@@ -24,7 +24,6 @@ Every external dependency is wrapped in a graceful-degradation path so the
 coach still produces useful output when API keys are absent or upstream
 services time out.
 """
-
 from __future__ import annotations
 
 import os

@@ -168,7 +168,9 @@ class CandidateService:
         candidate_id: str,
         candidates: list[CandidateSummary] | None = None,
     ) -> BackgroundReport:
-        """Comprehensive background report combining:
+        """Produce a comprehensive background report.
+
+        Combining:
         1. Candidate base data (from search or lookup)
         2. Gemini grounding search (news, social presence)
         3. Structured extraction into BackgroundReport
@@ -204,7 +206,8 @@ class CandidateService:
         candidate_ids: list[str],
         candidates: list[CandidateSummary] | None = None,
     ) -> ComparisonResult:
-        """Build structured comparison matrix.
+        """Build a structured comparison matrix.
+
         1. Fetch background for each candidate (parallel)
         2. Build dimension-wise matrix
         3. Call Gemini for analytical summary
@@ -504,9 +507,9 @@ class CandidateService:
             )
         return (
             f"Comparing {', '.join(names[:-1])} and {names[-1]}: These candidates "
-            f"represent diverse backgrounds and policy priorities. Delivery probability "
-            f"is best assessed by reviewing past governance outcomes documented in ECI "
-            f"records and media coverage."
+            "represent diverse backgrounds and policy priorities. Delivery probability "
+            "is best assessed by reviewing past governance outcomes documented in ECI "
+            "records and media coverage."
         )
 
     @staticmethod

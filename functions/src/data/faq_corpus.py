@@ -678,7 +678,10 @@ FAQ_CORPUS: Final[list[FAQEntry]] = [
     {
         "id": "general-panchayat-municipal",
         "topic": "General",
-        "question": "How are Panchayat and Municipal elections different from general elections?",
+        "question": (
+            "How are Panchayat and Municipal elections different from "
+            "general elections?"
+        ),
         "answer": (
             "Panchayat (73rd Amendment) and Municipal (74th Amendment) "
             "elections are conducted by State Election Commissions, not the "

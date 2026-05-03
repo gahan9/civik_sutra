@@ -7,7 +7,6 @@ any personally identifiable information.
 Environment configuration:
     EP_GCP_PROJECT_ID    GCP project that hosts Cloud NL API.
 """
-
 from __future__ import annotations
 
 import os

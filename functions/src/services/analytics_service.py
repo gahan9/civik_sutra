@@ -8,13 +8,12 @@ Environment configuration:
     EP_GCP_PROJECT_ID    GCP project that hosts Firestore.
     EP_ANALYTICS_ENABLED Set to ``false`` to disable logging entirely.
 """
-
 from __future__ import annotations
 
-import asyncio
-import logging
 import os
 import time
+import asyncio
+import logging
 from typing import Any
 
 logger = logging.getLogger(__name__)
