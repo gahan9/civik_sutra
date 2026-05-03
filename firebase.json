@@ -5,42 +5,45 @@
     "rewrites": [
       {
         "source": "/booth/**",
-        "function": {
-          "functionId": "api",
+        "run": {
+          "serviceId": "civiksutra-api",
           "region": "asia-south1"
         }
       },
       {
         "source": "/candidate/**",
-        "function": {
-          "functionId": "api",
+        "run": {
+          "serviceId": "civiksutra-api",
           "region": "asia-south1"
         }
       },
       {
         "source": "/assistant/**",
-        "function": {
-          "functionId": "api",
+        "run": {
+          "serviceId": "civiksutra-api",
           "region": "asia-south1"
         }
       },
       {
         "source": "/manifesto/**",
-        "function": {
-          "functionId": "api",
+        "run": {
+          "serviceId": "civiksutra-api",
           "region": "asia-south1"
         }
       },
       {
         "source": "/health",
-        "function": {
-          "functionId": "api",
+        "run": {
+          "serviceId": "civiksutra-api",
           "region": "asia-south1"
         }
       },
       {
         "source": "**",
-        "destination": "/index.html"
+        "run": {
+          "serviceId": "civiksutra-web",
+          "region": "asia-south1"
+        }
       }
     ],
     "headers": [

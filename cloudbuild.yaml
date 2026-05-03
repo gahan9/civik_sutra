@@ -18,6 +18,11 @@ substitutions:
   _FRONT_SERVICE: civiksutra-web
   _API_SERVICE: civiksutra-api
   _DEPLOY: "true"
+  _GEMINI_API_KEY: ""
+  _GOOGLE_MAPS_API_KEY: ""
+  _RECAPTCHA_SECRET_KEY: ""
+  _CORS_ORIGINS: '["https://civiksutra-2604261729.web.app"]'
+  _SHORT_SHA: "manual"
 
 options:
   logging: CLOUD_LOGGING_ONLY
@@ -60,7 +65,7 @@ steps:
     args:
       - build
       - --file=Dockerfile
-      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:$SHORT_SHA
+      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:${_SHORT_SHA}
       - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:latest
       - .
     waitFor: ['frontend-test']
@@ -71,7 +76,7 @@ steps:
     args:
       - build
       - --file=Dockerfile.api
-      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:$SHORT_SHA
+      - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:${_SHORT_SHA}
       - --tag=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:latest
       - .
     waitFor: ['functions-test']
@@ -104,7 +109,7 @@ steps:
           echo "Skipping deploy (--substitutions=_DEPLOY=false)"; exit 0
         fi
         gcloud run deploy ${_FRONT_SERVICE} \
-          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:$SHORT_SHA \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:${_SHORT_SHA} \
           --region=${_REGION} \
           --platform=managed \
           --allow-unauthenticated \
@@ -123,20 +128,20 @@ steps:
           echo "Skipping deploy (--substitutions=_DEPLOY=false)"; exit 0
         fi
         gcloud run deploy ${_API_SERVICE} \
-          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:$SHORT_SHA \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:${_SHORT_SHA} \
           --region=${_REGION} \
           --platform=managed \
           --allow-unauthenticated \
           --port=8080 \
           --cpu=1 --memory=1Gi --max-instances=10 \
-          --set-env-vars=EP_GCP_PROJECT_ID=$PROJECT_ID,EP_TRANSLATE_LOCATION=global \
+          --set-env-vars="EP_GCP_PROJECT_ID=$PROJECT_ID,EP_TRANSLATE_LOCATION=global,EP_GEMINI_API_KEY=${_GEMINI_API_KEY},EP_GOOGLE_MAPS_API_KEY=${_GOOGLE_MAPS_API_KEY},EP_RECAPTCHA_SECRET_KEY=${_RECAPTCHA_SECRET_KEY},EP_CORS_ORIGINS=${_CORS_ORIGINS}" \
           --quiet
     waitFor: ['push-api']
 
 images:
-  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:$SHORT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:${_SHORT_SHA}
   - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_FRONT_SERVICE}:latest
-  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:$SHORT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:${_SHORT_SHA}
   - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_API_SERVICE}:latest
 
 timeout: 1800s

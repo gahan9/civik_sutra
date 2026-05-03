@@ -37,13 +37,13 @@ from typing import Any
 
 import structlog
 
-from src.models.chat import ChatResponse, SourceCitation, ToolCallRecord
 from src.services.geo_service import GeoService
 from src.data.election_timeline import ELECTION_EVENTS
 from src.services.vertex_service import VertexFAQService
-from src.services.input_sanitiser import sanitise_chat_message
 from src.services.candidate_service import CandidateService
+from src.services.input_sanitiser import sanitise_chat_message
 from src.services.eligibility_service import check_voter_eligibility
+from src.models.chat import ChatResponse, SourceCitation, ToolCallRecord
 
 logger = structlog.get_logger(__name__)
 

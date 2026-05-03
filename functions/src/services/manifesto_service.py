@@ -33,8 +33,8 @@ MANIFESTO_CATEGORIES = [
     "governance",
 ]
 
-EXTRACTION_PROMPT = """You are a political analyst. Extract the key promises and policy positions from
-this party's manifesto into structured categories.
+EXTRACTION_PROMPT = """You are a political analyst. Extract key promises and policy
+positions from this party's manifesto into structured categories.
 
 Party: {party_name}
 
@@ -60,8 +60,8 @@ Rules:
 - Be factual -- do not interpret or editorialize
 - Return valid JSON only, no markdown fences"""
 
-COMPARISON_PROMPT = """You are an impartial political analyst. Compare the manifesto promises
-of these parties:
+COMPARISON_PROMPT = """You are an impartial political analyst. Compare the
+manifesto promises of these parties:
 
 {manifesto_data_json}
 
@@ -77,8 +77,8 @@ Rules:
 - Mention both strengths and gaps
 - Return plain text analysis only, no JSON"""
 
-PROMISE_TRACKING_PROMPT = """You are a fact-checker. For each promise made by {party_name} in their
-{election_year} manifesto, search for evidence of delivery.
+PROMISE_TRACKING_PROMPT = """You are a fact-checker. For each promise made by
+{party_name} in their {election_year} manifesto, search for evidence of delivery.
 
 Promises:
 {promises_json}
@@ -88,7 +88,8 @@ For each promise, determine:
 2. Evidence: specific data, statistics, or reports
 3. Source: news article, government report, or official data
 
-Return valid JSON as an array of objects with "promise", "status", "evidence", "source" fields.
+Return valid JSON as an array of objects with "promise", "status",
+"evidence", "source" fields.
 
 Rules:
 - Only use verifiable sources
@@ -283,7 +284,7 @@ class ManifestoService:
 
     async def _call_gemini(self, prompt: str) -> str:
         model = "gemini-2.0-flash"
-        url = f"{GEMINI_API_URL}/{model}:generateContent" f"?key={self._gemini_api_key}"
+        url = f"{GEMINI_API_URL}/{model}:generateContent?key={self._gemini_api_key}"
         body = json.dumps(
             {
                 "contents": [{"parts": [{"text": prompt}]}],

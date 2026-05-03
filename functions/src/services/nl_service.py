@@ -10,10 +10,10 @@ Environment configuration:
 
 from __future__ import annotations
 
-import logging
 import os
-from dataclasses import dataclass, field
+import logging
 from typing import Any
+from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,10 @@ class NLEnrichment:
 
 
 class NLService:
-    """Thin wrapper around Cloud Natural Language ``analyze_entities`` + ``analyze_sentiment``."""
+    """Thin wrapper around Cloud Natural Language API.
+
+    Integrates ``analyze_entities`` and ``analyze_sentiment``.
+    """
 
     def __init__(
         self,

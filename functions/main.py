@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 # Load functions/.env before first-party imports use os.environ (emulator, deploy).
-import asyncio
 import json
-from pathlib import Path
+import asyncio
 from typing import Any
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -15,19 +15,19 @@ if _env_file.is_file():
 from pydantic import ValidationError
 from firebase_functions import https_fn
 
+from src.services.geo_service import GeoService
+from src.services.chat_service import ChatService
+from src.data.election_timeline import ELECTION_EVENTS
+from src.services.candidate_service import CandidateService
+from src.services.analytics_service import AnalyticsService
+from src.services.manifesto_service import ManifestoService
 from src.models.chat import ChatRequest, TranslateRequest
 from src.models.booth import NearbyRequest, DirectionsRequest
+from src.models.manifesto import ManifestoCompareRequest
 from src.models.candidate import (
     CompareRequest,
     CandidateSearchRequest,
 )
-from src.models.manifesto import ManifestoCompareRequest
-from src.data.election_timeline import ELECTION_EVENTS
-from src.services.geo_service import GeoService
-from src.services.chat_service import ChatService
-from src.services.candidate_service import CandidateService
-from src.services.manifesto_service import ManifestoService
-from src.services.analytics_service import AnalyticsService
 from src.services.translation_service import TranslationService
 
 

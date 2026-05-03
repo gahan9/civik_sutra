@@ -29,15 +29,16 @@ CACHE_TTL_SECONDS = 24 * 60 * 60
 GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models"
 
-GROUNDING_PROMPT = """You are an election research assistant. Search for recent, factual information
-about the following candidate:
+GROUNDING_PROMPT = """You are an election research assistant. Search for recent,
+factual information about the following candidate:
 
 Name: {candidate_name}
 Constituency: {constituency}
 Party: {party}
 
 Find and structure as JSON with these fields:
-- "recent_news": array of objects with "title", "source", "date", "url", "sentiment" (positive/negative/neutral)
+- "recent_news": array of objects with "title", "source", "date", "url",
+  "sentiment" (positive/negative/neutral)
 - "achievements": array of strings
 - "controversies": array of strings
 - "social_media_presence": string or null
@@ -49,8 +50,8 @@ Rules:
 - Be factual and neutral in tone
 - Return valid JSON only, no markdown fences"""
 
-COMPARISON_PROMPT = """You are an impartial election analyst. Compare these candidates based on
-their official records and public information:
+COMPARISON_PROMPT = """You are an impartial election analyst. Compare these
+candidates based on their official records and public information:
 
 {candidate_data_json}
 
@@ -191,7 +192,10 @@ class CandidateService:
                 immovable=candidate.total_assets_inr * 2 // 3,
             ),
             source_urls={
-                "myneta": f"https://myneta.info/search/?q={urllib.parse.quote(candidate.name)}",
+                "myneta": (
+                    "https://myneta.info/search/?q="
+                    f"{urllib.parse.quote(candidate.name)}"
+                ),
             },
         )
 
@@ -472,7 +476,10 @@ class CandidateService:
         return GroundingResult(
             recent_news=[
                 NewsItem(
-                    title=f"{candidate_name} addresses public rally on development agenda",
+                    title=(
+                        f"{candidate_name} addresses public rally on "
+                        "development agenda"
+                    ),
                     source="Demo Data",
                     date="2024-03-15",
                     sentiment="neutral",
@@ -489,10 +496,11 @@ class CandidateService:
         names = [r.candidate.name for r in reports]
         if len(names) == 2:
             return (
-                f"Comparing {names[0]} and {names[1]}: Both candidates bring different "
-                f"strengths to the constituency. A detailed assessment requires verified "
-                f"data from ECI affidavits and official records. Voters should review "
-                f"candidate profiles on MyNeta.info for comprehensive background checks."
+                f"Comparing {names[0]} and {names[1]}: Both candidates bring "
+                "different strengths to the constituency. A detailed assessment "
+                "requires verified data from ECI affidavits and official records. "
+                "Voters should review candidate profiles on MyNeta.info for "
+                "comprehensive background checks."
             )
         return (
             f"Comparing {', '.join(names[:-1])} and {names[-1]}: These candidates "

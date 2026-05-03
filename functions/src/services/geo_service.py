@@ -5,9 +5,9 @@ import re
 import json
 import asyncio
 import urllib.parse
+from typing import Any
 import urllib.request
 from math import cos, sin, asin, sqrt, radians
-from typing import Any
 
 from src.models.booth import (
     LatLng,
