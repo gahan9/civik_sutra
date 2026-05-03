@@ -1481,3 +1481,137 @@ input {
   color: #5a6578;
   font-style: italic;
 }
+
+/* --- Page Transition Animations --- */
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.app-main > * {
+  animation: fadeSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Journey progress connector — animated fill between steps */
+.election-journey__steps {
+  position: relative;
+}
+
+.election-journey__sep {
+  transition: color 0.3s ease;
+}
+
+.election-journey__btn {
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.election-journey__btn:hover:not(.election-journey__btn--active) {
+  box-shadow: 0 4px 12px rgb(31 94 255 / 15%);
+  transform: translateY(-1px);
+}
+
+.election-journey__btn--active {
+  box-shadow: 0 6px 20px rgb(31 94 255 / 25%);
+}
+
+/* Nav bar buttons — smooth active state transition */
+.nav-bar button {
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Card entrance stagger */
+.booth-card,
+.candidate-card,
+.voter-content,
+.manifesto-selector,
+.chat-container {
+  animation: scaleIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Trust banner subtle entrance */
+.trust-banner {
+  animation: fadeSlideIn 0.5s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Checklist progress bar — smooth fill + shimmer */
+.checklist-progress-bar {
+  position: relative;
+  overflow: hidden;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.checklist-progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(255 255 255 / 30%) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Quick question buttons — playful hover */
+.quick-question-btn {
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.quick-question-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgb(31 94 255 / 12%);
+}
+
+/* Chat message entrance */
+.chat-msg {
+  animation: fadeSlideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Prefers reduced motion: disable all animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
